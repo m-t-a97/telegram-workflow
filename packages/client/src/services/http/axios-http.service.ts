@@ -14,4 +14,16 @@ export class AxiosHttpService implements IHttpService {
       .post<T>(`${this.apiUrl}/${url}`, data)
       .then((response) => response.data);
   }
+
+  public async put<T>(url: string, data: T): Promise<any> {
+    return axios
+      .put<T>(`${this.apiUrl}/${url}`, data)
+      .then((response) => response.data);
+  }
+
+  public async delete(url: string): Promise<any> {
+    return axios
+      .delete(`${this.apiUrl}/${url}`)
+      .then((response) => response.data);
+  }
 }

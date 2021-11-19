@@ -1,113 +1,48 @@
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 
-import { Job, Queue, QueueEvents, Worker } from "bullmq";
-import EventEmitter from "events";
-import { ChatAutomation, LoggerUtils } from "@autogram/shared-core";
 import _ from "lodash";
-import os from "os";
 
-import constants from "src/constants/constants";
-import { EnvironmentVariables } from "src/constants/environment-variables";
+import { ChatAutomation, IDUtils, LoggerUtils } from "@autogram/shared-core";
+
 import { AbstractChatAutomationService } from "./abstract-chat-automation.service";
 
 @Injectable()
-export class TelegramChatAutomationService
-  implements AbstractChatAutomationService
-{
-  private queue: Queue;
-  private events: EventEmitter[];
-  private chatAutomationsUserMap: Record<
-    string,
-    {
-      telegramSessionKey: string;
-      automations: Record<string, Partial<ChatAutomation>>;
-    }
-  > = {};
-
+export class TelegramChatAutomationService extends AbstractChatAutomationService {
   private chatAutomations: ChatAutomation[] = [];
 
-  constructor(
-    private readonly configService: ConfigService<EnvironmentVariables>
-  ) {
-    // this.initialiseQueueAndWorkers();
-    // this.executeChatAutomations();
-    // this.chatAutomationWorker.on("active", (job: Job, prev: any) => {
-    //   console.log("active", job.id);
-    // });
-    // this.chatAutomationWorker.on("progress", (job: Job, progress: number | object) => {
-    //   console.log("progress", job.id, progress);
-    // });
-    // this.chatAutomationWorker.on("completed", (job: Job, returnvalue: any) => {
-    //   console.log("completed", job.id, returnvalue);
-    // });
-    // this.chatAutomationWorker.on("failed", (job: Job, failedReason: string) => {
-    //   console.error("failed", job.id);
-    // });
-    // this.chatAutomationWorker.on("error", (error: any) => {
-    //   console.error(error);
-    // });
-  }
-
-  private async initialiseQueueAndWorkers(): Promise<void> {
-    this.queue = new Queue(constants.queue.chatAutomationsQueueKey, {
-      connection: {
-        host: this.configService.get<string>("HOST"),
-        port: 6379,
-      },
-    });
-
-    const queueEvents = new QueueEvents(
-      constants.queue.chatAutomationsQueueKey,
-      {
-        connection: {
-          host: this.configService.get<string>("HOST"),
-          port: 6379,
-        },
-      }
-    );
-
-    queueEvents.on("completed", ({ jobId, returnvalue }) => {
-      LoggerUtils.log(
-        "TelegramChatAutomationService",
-        "initialiseQueueAndWorkers",
-        `[Completed job]: ${jobId},`,
-        returnvalue
-      );
-    });
-
-    queueEvents.on("failed", ({ jobId, failedReason }) => {
-      LoggerUtils.error(
-        "TelegramChatAutomationService",
-        "initialiseQueueAndWorkers",
-        `[Failed job]: ${jobId}`,
-        failedReason
-      );
-    });
-
-    const job = async (job: Job): Promise<any> => {
-      if (_.isEqual(job.name, constants.queue.chatAutomationJobKey)) {
-        // TODO: do the logic of forwarding messages here
-        LoggerUtils.log(
-          "TelegramChatAutomationService",
-          "initialiseQueueAndWorkers",
-          `Processing job ${job.id} of type ${job.name}`
-        );
-      }
+  public async create(): Promise<{ uid: string }> {
+    const newAutomation: ChatAutomation = {
+      uid: IDUtils.generate(),
+      name: `automation-${IDUtils.generate(6, false)}`.toUpperCase(),
+      sourceChatId: null,
+      destinationChatIds: [],
+      active: false,
+      touched: false,
     };
 
-    const workers: Worker[] = [];
+    this.chatAutomations.push(newAutomation);
 
-    for (let i = 0; i < os.cpus().length; i++) {
-      const worker = new Worker(constants.queue.chatAutomationsQueueKey, job, {
-        connection: {
-          host: this.configService.get<string>("HOST"),
-          port: 6379,
-        },
-      });
+    return Promise.resolve({ uid: newAutomation.uid });
+  }
 
-      workers.push(worker);
-    }
+  public async getAll(): Promise<ChatAutomation[]> {
+    return Promise.resolve(this.chatAutomations);
+  }
+
+  public async get(id: string): Promise<ChatAutomation | null> {
+    const chatAutomation = this.chatAutomations.find(
+      (chatAutomation: ChatAutomation) => _.isEqual(chatAutomation.uid, id)
+    );
+
+    return Promise.resolve(chatAutomation);
+  }
+
+  public async delete(id: string): Promise<void> {
+    this.chatAutomations = this.chatAutomations.filter(
+      (chatAutomation: ChatAutomation) => !_.isEqual(chatAutomation.uid, id)
+    );
+
+    return Promise.resolve();
   }
 
   public async activate(data: {

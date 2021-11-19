@@ -58,13 +58,12 @@ import axios from "axios";
 import { ChatAutomation, LoggerUtils, RxjsHelperUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
-import IAuthService from "@/services/auth/i-auth.service";
-import ITelegramChatsAutomationDaoService from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
-import ServiceProviderKeys from "@/services/service-provider-keys";
+import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
-import APIEndpoints from "@/constants/api-endpoints";
-import LocalStorageService from "@/services/storage/local-storage.service";
-import LocalStorageKeys from "@/constants/local-storage-keys";
+import { APIEndpoints } from "@/constants/api-endpoints";
+import { LocalStorageService } from "@/services/storage/local-storage.service";
+import { LocalStorageKeys } from "@/constants/local-storage-keys";
 
 interface Props {
   chatAutomation: ChatAutomation;
@@ -76,8 +75,6 @@ const props = defineProps<Props>();
 
 const store: Store<StoreStateType> = useStore();
 const router: Router = useRouter();
-
-const authService: IAuthService = inject(ServiceProviderKeys.AUTH_SERVICE);
 
 const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
   inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
@@ -144,8 +141,6 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
 
           isActivatingAutomation.value = true;
 
-          const idToken = await authService.getJwtToken();
-
           const savedTelegramSession = await LocalStorageService.getItem(
             LocalStorageKeys.SAVED_TELEGRAM_SESSION
           );
@@ -154,7 +149,6 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
             await axios.post(
               `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATION_ACTIVATE}`,
               {
-                idToken,
                 telegramSessionKey: savedTelegramSession,
                 chatAutomation: props.chatAutomation,
               }
@@ -162,7 +156,7 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
           } else {
             await axios.post(
               `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATION_DEACTIVATE}`,
-              { idToken, chatAutomation: props.chatAutomation }
+              { chatAutomation: props.chatAutomation }
             );
           }
 

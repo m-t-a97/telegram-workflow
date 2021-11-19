@@ -36,8 +36,8 @@ import { Api } from "telegram";
 import { ChatAutomation, LoggerUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
-import ServiceProviderKeys from "@/services/service-provider-keys";
-import ITelegramChatsAutomationDaoService from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ServiceProviderKeys } from "@/services/service-provider-keys";
+import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 
 interface Props {
   chatAutomation: ChatAutomation;

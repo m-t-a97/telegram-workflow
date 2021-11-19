@@ -60,9 +60,9 @@ const storeChatAutomationsComputed = computed(
   () => store.state.telegramStore.chatAutomations
 );
 
-function fetchChatAutomations(): void {
+async function fetchChatAutomations(): Promise<void> {
   isFetchingChatAutomations.value = true;
-  chatAutomations.value = store.state.telegramStore.chatAutomations;
+  chatAutomations.value = storeChatAutomationsComputed.value;
   storeReferenceToAllAutomationsInsideToggleMap();
   isFetchingChatAutomations.value = false;
 }
@@ -110,6 +110,7 @@ function watchStoreChatAutomations(): void {
         !isChatAutomationsBeingDeleted.value
       ) {
         chatAutomations.value = updatedAutomations;
+        storeReferenceToAllAutomationsInsideToggleMap();
       }
     }
   );

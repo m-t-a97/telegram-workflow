@@ -54,6 +54,7 @@ import { StoreStateType } from "@/store";
 import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { RoutePaths } from "@/constants/route-paths";
+import { EventsService } from "@/services/events/events.service";
 
 interface Props {
   chatAutomationsToggleStateMap: Record<string, boolean>;
@@ -87,19 +88,17 @@ const isCheckboxChecked = ref<boolean>(false);
 const checkboxWasChangedManually = ref<boolean>(false);
 const isAnyChatAutomationSelectedForDeletion = ref<boolean>(false);
 
+const newlyCreatedChatAutomationId = ref<string>("");
+
 async function onCreateNewAutomation(): Promise<void> {
   try {
     emit("creating-new-automation");
     isNewAutomationCreationInProgress.value = true;
 
     const { uid } = await telegramChatsAutomationDaoService.create();
+    newlyCreatedChatAutomationId.value = uid;
 
-    await router.push({
-      name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
-      params: {
-        id: uid,
-      },
-    });
+    EventsService.chatAutomationsUpdater$.next();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationsActionButtons",
@@ -128,10 +127,7 @@ async function onDeleteSelectedAutomations(): Promise<void> {
 
     await Promise.all(chatAutomationsDeletedAsPromises);
 
-    isChatAutomationsBeingDeleted.value = false;
-    chatAutomations.value = chatAutomationsComputed.value;
-
-    emit("chat-automations-deleted");
+    EventsService.chatAutomationsUpdater$.next();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationsActionButtons",
@@ -140,6 +136,7 @@ async function onDeleteSelectedAutomations(): Promise<void> {
     );
 
     isChatAutomationsBeingDeleted.value = false;
+    emit("chat-automations-deleted");
   }
 }
 
@@ -154,7 +151,34 @@ function watchChangesOnChatAutomationsFromStore(): void {
     if (!isNewAutomationCreationInProgress.value) {
       chatAutomations.value = chatAutomationsComputed.value;
     }
+
+    if (isNewAutomationCreationInProgress.value) {
+      navigateToChatAutomationWorkflowAfterCreatingNewAutomation();
+    }
+
+    if (isChatAutomationsBeingDeleted.value) {
+      updateUIAfterDeletingAutomations();
+    }
   });
+}
+
+async function navigateToChatAutomationWorkflowAfterCreatingNewAutomation(): Promise<void> {
+  setTimeout(async () => {
+    console.log("new id:", newlyCreatedChatAutomationId.value);
+
+    await router.push({
+      name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
+      params: {
+        id: newlyCreatedChatAutomationId.value,
+      },
+    });
+  }, 100);
+}
+
+function updateUIAfterDeletingAutomations(): void {
+  isChatAutomationsBeingDeleted.value = false;
+  chatAutomations.value = chatAutomationsComputed.value;
+  emit("chat-automations-deleted");
 }
 
 function watchChatAutomationsToggleMapForChanges(): void {

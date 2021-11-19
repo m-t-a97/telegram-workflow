@@ -15,12 +15,12 @@ const telegramChatAutomationWorkflowRouteGuard = async (
   const chatAutomations: ChatAutomation[] = (store.state as StoreStateType)
     .telegramStore.chatAutomations;
 
-  const foundChatAutomation = chatAutomations.find(
+  const chatAutomation: ChatAutomation = chatAutomations.find(
     (chatAutomation: ChatAutomation) =>
       _.isEqual(chatAutomation.uid, to.params.id)
   );
 
-  if (_.isNil(foundChatAutomation)) {
+  if (_.isNil(chatAutomation)) {
     next({
       name: RoutePaths.NOT_FOUND,
     });

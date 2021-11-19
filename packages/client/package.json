@@ -5,7 +5,6 @@
   "scripts": {
     "serve": "vue-cli-service serve --port 3000",
     "build": "vue-cli-service build",
-    "start:dev": "vue-cli-service serve --port 3000",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "build:watch": "npx vue-cli-service build --watch",

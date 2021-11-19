@@ -1,4 +1,4 @@
-import { ChatAutomation } from "@shared-core";
+import { ChatAutomation, LoggerUtils } from "@shared-core";
 
 import { APIEndpoints } from "@/constants/api-endpoints";
 import { IHttpService } from "@/services/http/i-http.service";
@@ -13,9 +13,23 @@ export class ApiTelegramChatsAutomationDaoService
   constructor(private readonly httpService: IHttpService) {}
 
   public async create(): Promise<ChatAutomationCreatedResultType> {
-    return Promise.resolve({
-      uid: "",
-    });
+    try {
+      const { uid } = await this.httpService.get<{ uid: string }>(
+        APIEndpoints.CHAT_AUTOMATION_CREATE
+      );
+
+      return Promise.resolve({
+        uid,
+      });
+    } catch (error) {
+      LoggerUtils.error(
+        "ApiTelegramChatsAutomationDaoService",
+        "create",
+        error
+      );
+
+      return Promise.reject(error);
+    }
   }
 
   public async getAll(): Promise<ChatAutomation[]> {
@@ -25,17 +39,17 @@ export class ApiTelegramChatsAutomationDaoService
   }
 
   public async getOne(id: string): Promise<ChatAutomation> {
-    return Promise.resolve(null);
+    return this.httpService.get(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`);
   }
 
   public async update(
     id: string,
     data: Partial<ChatAutomation>
   ): Promise<void> {
-    return Promise.resolve();
+    return this.httpService.put(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`, data);
   }
 
   public async delete(id: string): Promise<void> {
-    return Promise.resolve();
+    return this.httpService.delete(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`);
   }
 }

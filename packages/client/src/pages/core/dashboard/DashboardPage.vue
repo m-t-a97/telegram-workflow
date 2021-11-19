@@ -49,15 +49,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, watch } from "vue";
+import { computed, inject, onUnmounted, ref, watch } from "vue";
 import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import { Store, useStore } from "vuex";
 
 import _ from "lodash";
 import { VaCard, VaCardContent, VaProgressBar, VaAlert } from "vuestic-ui";
 import { Api } from "telegram";
+import { catchError, of, Subscription, tap } from "rxjs";
 
-import { LoggerUtils } from "@shared-core";
+import { LoggerUtils, RxjsHelperUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
@@ -68,6 +69,7 @@ import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-
 import { RoutePaths } from "@/constants/route-paths";
 import Navbar from "@/components/core/Navbar.vue";
 import Sidebar from "@/components/core/Sidebar.vue";
+import { EventsService } from "@/services/events/events.service";
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store: Store<StoreStateType> = useStore();
@@ -95,6 +97,8 @@ const currentRoutePath = ref<string>(route.path);
 const isCurrentRouteDashboardOnly = computed<boolean>(() =>
   _.isEqual(currentRoutePath.value, `/${RoutePaths.DASHBOARD}`)
 );
+
+let chatAutomationsUpdater_$: Subscription;
 
 async function initialise(): Promise<void> {
   try {
@@ -131,22 +135,36 @@ async function fetchChats(): Promise<void> {
   }
 }
 
-async function fetchChatAutomations(): Promise<void> {
-  try {
-    const chatAutomations = await telegramChatsAutomationDaoService.getAll();
+function fetchChatAutomations(): void {
+  chatAutomationsUpdater_$ = EventsService.chatAutomationsUpdater$
+    .pipe(
+      tap(async () => {
+        const chatAutomations =
+          await telegramChatsAutomationDaoService.getAll();
 
-    await store.dispatch(
-      TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATIONS,
-      chatAutomations
-    );
-  } catch (error) {
-    LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
-  }
+        await store.dispatch(
+          TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATIONS,
+          chatAutomations
+        );
+      }),
+      catchError((error: any) => {
+        LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
+
+        return of(null);
+      })
+    )
+    .subscribe();
+
+  EventsService.chatAutomationsUpdater$.next();
 }
 
 function onToggleSidebar(): void {
   showSidebar.value = !showSidebar.value;
 }
+
+onUnmounted(() => {
+  RxjsHelperUtils.unsubscribe(chatAutomationsUpdater_$);
+});
 
 watch(route, (newRoute: RouteLocationNormalizedLoaded) => {
   currentRoutePath.value = newRoute.path;
