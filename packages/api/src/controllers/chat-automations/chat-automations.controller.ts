@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
 
 import { ChatAutomation } from "@autogram/shared-core";
 
@@ -23,6 +31,14 @@ export class ChatAutomationsController {
   @Get("/:id")
   public async get(@Param("id") id: string): Promise<ChatAutomation | null> {
     return this.chatAutomationService.get(id);
+  }
+
+  @Put("/:id")
+  public async update(
+    @Param("id") id: string,
+    @Body() chatAutomation: Partial<ChatAutomation>
+  ): Promise<void> {
+    return this.chatAutomationService.update(id, chatAutomation);
   }
 
   @Delete("/:id")

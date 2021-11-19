@@ -60,10 +60,10 @@ import { ChatAutomation, LoggerUtils, RxjsHelperUtils } from "@shared-core";
 import { StoreStateType } from "@/store";
 import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
-import { TelegramStoreActions } from "@/store/modules/telegram.store";
 import { APIEndpoints } from "@/constants/api-endpoints";
 import { LocalStorageService } from "@/services/storage/local-storage.service";
 import { LocalStorageKeys } from "@/constants/local-storage-keys";
+import { EventsService } from "@/services/events/events.service";
 
 interface Props {
   chatAutomation: ChatAutomation;
@@ -107,13 +107,7 @@ function registerDebounceEffectOnChatAutomationNameInputEvent(): void {
           }
         );
 
-        await store.dispatch(
-          TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATION,
-          {
-            uid: props.chatAutomation.uid,
-            name: chatAutomationName.value,
-          } as Partial<ChatAutomation>
-        );
+        EventsService.chatAutomationsUpdater$.next();
       }),
       catchError((error) => {
         LoggerUtils.error(
@@ -169,13 +163,7 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
             }
           );
 
-          await store.dispatch(
-            TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATION,
-            {
-              uid: props.chatAutomation.uid,
-              active: chatAutomationActive.value,
-            } as Partial<ChatAutomation>
-          );
+          EventsService.chatAutomationsUpdater$.next();
         } catch (error) {
           LoggerUtils.error(
             "ChatAutomationWorkflowToolbar",

@@ -37,6 +37,24 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
     return Promise.resolve(chatAutomation);
   }
 
+  public async update(
+    id: string,
+    chatAutomation: Partial<ChatAutomation>
+  ): Promise<any> {
+    let automationToUpdateIndex = this.chatAutomations.findIndex(
+      (chatAutomation: ChatAutomation) => _.isEqual(chatAutomation.uid, id)
+    );
+
+    if (!_.isEqual(automationToUpdateIndex, -1)) {
+      this.chatAutomations[automationToUpdateIndex] = {
+        ...this.chatAutomations[automationToUpdateIndex],
+        ...chatAutomation,
+      };
+    }
+
+    return Promise.resolve();
+  }
+
   public async delete(id: string): Promise<void> {
     this.chatAutomations = this.chatAutomations.filter(
       (chatAutomation: ChatAutomation) => !_.isEqual(chatAutomation.uid, id)

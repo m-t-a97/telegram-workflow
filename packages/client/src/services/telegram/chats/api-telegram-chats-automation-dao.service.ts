@@ -44,9 +44,12 @@ export class ApiTelegramChatsAutomationDaoService
 
   public async update(
     id: string,
-    data: Partial<ChatAutomation>
+    chatAutomation: Partial<ChatAutomation>
   ): Promise<void> {
-    return this.httpService.put(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`, data);
+    return this.httpService.put(
+      `${APIEndpoints.CHAT_AUTOMATIONS}/${id}`,
+      chatAutomation
+    );
   }
 
   public async delete(id: string): Promise<void> {

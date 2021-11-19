@@ -21,6 +21,6 @@ const appName = process.env.VUE_APP_PROJECT_NAME;
 
 <style lang="scss" scoped>
 .navbar-container {
-  @apply w-full px-4 py-4 fixed z-20 flex flex-row justify-between items-center bg-gray-300;
+  @apply w-full px-4 py-4 fixed z-20 flex flex-row justify-between items-center bg-white;
 }
 </style>

@@ -10,6 +10,11 @@ export abstract class AbstractChatAutomationService {
 
   public abstract get(id: string): Promise<ChatAutomation | null>;
 
+  public abstract update(
+    id: string,
+    chatAutomation: Partial<ChatAutomation>
+  ): Promise<any>;
+
   public abstract delete(id: string): Promise<any>;
 
   public abstract activate(data: {

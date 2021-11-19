@@ -30,7 +30,7 @@ export interface ITelegramChatsAutomationDaoService {
   /**
    * Updates a chat automation
    * @param {string} id - The id of the chat automation to update
-   * @param {Partial<ChatAutomation>} Partial<ChatAutomation> - The data needed to update the existing chat automation
+   * @param {Partial<ChatAutomation>} - The data needed to update the existing chat automation
    * @returns {Promise<void>} Promise<void>
    */
   update(id: string, data: Partial<ChatAutomation>): Promise<void>;

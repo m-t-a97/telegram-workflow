@@ -26,7 +26,7 @@
                 <router-link
                   :to="`/${RoutePaths.DASHBOARD}/${RoutePaths.CHATS}`"
                 >
-                  <va-card-content
+                  <va-card-content class="text-black text-base font-bold"
                     >View Chats, Channels & Groups</va-card-content
                   >
                 </router-link>
@@ -36,7 +36,9 @@
                 <router-link
                   :to="`/${RoutePaths.DASHBOARD}/${RoutePaths.CHAT_AUTOMATIONS}`"
                 >
-                  <va-card-content>Chat Automations</va-card-content>
+                  <va-card-content class="text-black text-base font-bold"
+                    >Chat Automations</va-card-content
+                  >
                 </router-link>
               </va-card>
             </div>

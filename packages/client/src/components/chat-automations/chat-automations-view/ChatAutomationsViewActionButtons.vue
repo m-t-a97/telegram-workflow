@@ -164,8 +164,6 @@ function watchChangesOnChatAutomationsFromStore(): void {
 
 async function navigateToChatAutomationWorkflowAfterCreatingNewAutomation(): Promise<void> {
   setTimeout(async () => {
-    console.log("new id:", newlyCreatedChatAutomationId.value);
-
     await router.push({
       name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
       params: {
