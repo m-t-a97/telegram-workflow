@@ -3,15 +3,16 @@
     <va-progress-bar v-if="isInitialisingTelegram" indeterminate />
 
     <template v-if="!isInitialisingTelegram">
-      <Navbar @show-sidebar="onToggleSidebar()" />
+      <Navbar v-show="isNavbarVisible" @show-sidebar="onToggleSidebar()" />
 
       <div class="h-full w-full flex flex-row">
         <Sidebar
+          v-show="isNavbarVisible"
           :showSidebar="showSidebar"
           @toggle-sidebar="onToggleSidebar()"
         />
 
-        <div class="h-full w-full px-2 pt-16">
+        <div class="h-full w-full" :class="{ 'px-2 pt-16': isNavbarVisible }">
           <template v-if="isCurrentRouteDashboardOnly">
             <va-alert v-if="!isLoggedIntoTelegramComputed" dense color="danger">
               You need to connect your telegram account in the settings.
@@ -49,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onUnmounted, ref, watch } from "vue";
+import { computed, inject, onUnmounted, ref, watchEffect } from "vue";
 import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import { Store, useStore } from "vuex";
 
@@ -89,6 +90,7 @@ const isLoggedIntoTelegramComputed = computed(
   () => store.state.telegramStore.isLoggedIn
 );
 
+const isNavbarVisible = ref<boolean>(false);
 const isInitialisingTelegram = ref<boolean>(false);
 const showSidebar = ref<boolean>(false);
 
@@ -166,8 +168,14 @@ onUnmounted(() => {
   RxjsHelperUtils.unsubscribe(chatAutomationsUpdater_$);
 });
 
-watch(route, (newRoute: RouteLocationNormalizedLoaded) => {
-  currentRoutePath.value = newRoute.path;
+watchEffect(() => {
+  currentRoutePath.value = route.path;
+
+  if (route.path.indexOf(RoutePaths.CHAT_AUTOMATION_WORKFLOW) !== -1) {
+    isNavbarVisible.value = false;
+  } else {
+    isNavbarVisible.value = true;
+  }
 });
 
 initialise();
