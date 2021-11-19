@@ -25,7 +25,7 @@
 
           <router-link
             class="w-full"
-            :to="`/workflow/chat-automation-workflow/${chatAutomation.uid}`"
+            :to="`/dashboard/workflow/chat-automation-workflow/${chatAutomation.uid}`"
           >
             <va-list-item-section>
               <va-list-item-label class="font-bold">

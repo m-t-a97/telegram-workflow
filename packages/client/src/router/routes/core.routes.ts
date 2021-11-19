@@ -39,26 +39,26 @@ const CORE_ROUTES: RouteRecordRaw[] = [
           ),
         meta: { requiresTelegramLogin: true },
       },
-    ],
-  },
-  {
-    path: `/${RoutePaths.WORKFLOW}`,
-    name: RoutePaths.WORKFLOW,
-    component: () =>
-      import(
-        /* webpackChunkName: "workflow" */ "@/pages/core/workflow/WorkflowPage.vue"
-      ),
-    meta: { requiresAuth: true, requiresTelegramLogin: true },
-    children: [
       {
-        path: `${RoutePaths.CHAT_AUTOMATION_WORKFLOW}/:id`,
-        name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
+        path: RoutePaths.WORKFLOW,
+        name: RoutePaths.WORKFLOW,
         component: () =>
           import(
-            /* webpackChunkName: "chat-automation-workflow" */ "@/pages/core/workflow/chats/ChatAutomationWorkflowPage.vue"
+            /* webpackChunkName: "workflow" */ "@/pages/core/workflow/WorkflowPage.vue"
           ),
-        props: true,
-        beforeEnter: telegramChatAutomationWorkflowRouteGuard,
+        meta: { requiresTelegramLogin: true },
+        children: [
+          {
+            path: `${RoutePaths.CHAT_AUTOMATION_WORKFLOW}/:id`,
+            name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
+            component: () =>
+              import(
+                /* webpackChunkName: "chat-automation-workflow" */ "@/pages/core/workflow/chats/ChatAutomationWorkflowPage.vue"
+              ),
+            props: true,
+            beforeEnter: telegramChatAutomationWorkflowRouteGuard,
+          },
+        ],
       },
     ],
   },
