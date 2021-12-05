@@ -39,7 +39,7 @@ jest.mock(
         }),
         getOne: jest.fn((id: string) => {
           const chatAutomation = chatAutomations.find(
-            (chatAutomation: ChatAutomation) => chatAutomation.uid === id
+            (chatAutomation: ChatAutomation) => chatAutomation.id === id
           );
 
           return mockOf(chatAutomation);
@@ -57,16 +57,16 @@ jest.mock(
           chatAutomations.push(newChatAutomation);
 
           return Promise.resolve({
-            uid: newChatAutomation.uid,
+            uid: newchatAutomation.id,
           } as ChatAutomationCreatedResultType);
         }),
         update: jest.fn((id: string, data: Partial<ChatAutomation>) => {
           const chatAutomationToUpdate = chatAutomations.find(
-            (chatAutomation: ChatAutomation) => chatAutomation.uid === id
+            (chatAutomation: ChatAutomation) => chatAutomation.id === id
           );
 
           const chatAutomationToUpdateIndex = chatAutomations.findIndex(
-            (chatAutomation: ChatAutomation) => chatAutomation.uid === id
+            (chatAutomation: ChatAutomation) => chatAutomation.id === id
           );
 
           chatAutomations[chatAutomationToUpdateIndex] = {
@@ -78,7 +78,7 @@ jest.mock(
         }),
         delete: jest.fn((id: string) => {
           const chatAutomationToDeleteIndex = chatAutomations.findIndex(
-            (chatAutomation: ChatAutomation) => chatAutomation.uid === id
+            (chatAutomation: ChatAutomation) => chatAutomation.id === id
           );
 
           chatAutomations.splice(chatAutomationToDeleteIndex, 1);

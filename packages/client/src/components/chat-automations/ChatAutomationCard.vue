@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="`/workflow/chat-automation-workflow/${props.chatAutomation.uid}`"
+    :to="`/workflow/chat-automation-workflow/${props.chatAutomation.id}`"
   >
     <va-card>
       <va-card-content>

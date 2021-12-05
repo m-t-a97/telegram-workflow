@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from "@nestjs/common";
 
 import { ChatAutomation } from "@autogram/shared-core";
@@ -47,21 +48,12 @@ export class ChatAutomationsController {
   }
 
   @Post("/activate")
-  public async activate(
-    @Body()
-    data: {
-      idToken: string;
-      telegramSessionKey: string;
-      chatAutomation: ChatAutomation;
-    }
-  ): Promise<any> {
-    return this.chatAutomationService.activate(data);
+  public async activate(@Body() chatAutomation: ChatAutomation): Promise<any> {
+    return this.chatAutomationService.activate(chatAutomation);
   }
 
   @Post("/deactivate")
-  public async deactivate(
-    @Body() data: { idToken: string; chatAutomation: ChatAutomation }
-  ): Promise<any> {
-    return this.chatAutomationService.deactivate(data);
+  public async deactivate(@Body() data: { id: string }): Promise<any> {
+    return this.chatAutomationService.deactivate(data.id);
   }
 }

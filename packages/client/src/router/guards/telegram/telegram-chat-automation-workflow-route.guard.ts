@@ -17,7 +17,7 @@ const telegramChatAutomationWorkflowRouteGuard = async (
 
   const chatAutomation: ChatAutomation = chatAutomations.find(
     (chatAutomation: ChatAutomation) =>
-      _.isEqual(chatAutomation.uid, to.params.id)
+      _.isEqual(chatAutomation.id, to.params.id)
   );
 
   if (_.isNil(chatAutomation)) {

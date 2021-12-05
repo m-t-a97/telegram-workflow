@@ -2,7 +2,7 @@
   <va-list class="chat-automations-list">
     <va-list-item
       v-for="chatAutomation in props.chatAutomations"
-      :key="chatAutomation.uid"
+      :key="chatAutomation.id"
     >
       <va-inner-loading
         class="w-full"
@@ -10,7 +10,7 @@
         :size="20"
         :loading="
           props.isChatAutomationsBeingDeleted &&
-          chatAutomationsToggleStateMap[chatAutomation.uid]
+          chatAutomationsToggleStateMap[chatAutomation.id]
         "
       >
         <div class="w-full flex flex-row justify-between items-center">
@@ -18,14 +18,14 @@
             <va-checkbox
               v-show="!props.isChatAutomationsBeingDeleted"
               color="#000000"
-              v-model="chatAutomationListItemCheckboxMap[chatAutomation.uid]"
-              @click="onCheckedListItem(chatAutomation.uid)"
+              v-model="chatAutomationListItemCheckboxMap[chatAutomation.id]"
+              @click="onCheckedListItem(chatAutomation.id)"
             />
           </va-list-item-section>
 
           <router-link
             class="w-full"
-            :to="`/dashboard/workflow/chat-automation-workflow/${chatAutomation.uid}`"
+            :to="`/dashboard/workflow/chat-automation-workflow/${chatAutomation.id}`"
           >
             <va-list-item-section>
               <va-list-item-label class="font-bold">

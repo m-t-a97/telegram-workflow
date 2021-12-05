@@ -12,7 +12,7 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
 
   public async create(): Promise<{ uid: string }> {
     const newAutomation: ChatAutomation = {
-      uid: IDUtils.generate(),
+      id: IDUtils.generate(),
       name: `automation-${IDUtils.generate(6, false)}`.toUpperCase(),
       sourceChatId: null,
       destinationChatIds: [],
@@ -22,7 +22,7 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
 
     this.chatAutomations.push(newAutomation);
 
-    return Promise.resolve({ uid: newAutomation.uid });
+    return Promise.resolve({ uid: newAutomation.id });
   }
 
   public async getAll(): Promise<ChatAutomation[]> {
@@ -31,7 +31,7 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
 
   public async get(id: string): Promise<ChatAutomation | null> {
     const chatAutomation = this.chatAutomations.find(
-      (chatAutomation: ChatAutomation) => _.isEqual(chatAutomation.uid, id)
+      (chatAutomation: ChatAutomation) => _.isEqual(chatAutomation.id, id)
     );
 
     return Promise.resolve(chatAutomation);
@@ -42,7 +42,7 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
     chatAutomation: Partial<ChatAutomation>
   ): Promise<any> {
     let automationToUpdateIndex = this.chatAutomations.findIndex(
-      (chatAutomation: ChatAutomation) => _.isEqual(chatAutomation.uid, id)
+      (chatAutomation: ChatAutomation) => _.isEqual(chatAutomation.id, id)
     );
 
     if (!_.isEqual(automationToUpdateIndex, -1)) {
@@ -57,28 +57,26 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
 
   public async delete(id: string): Promise<void> {
     this.chatAutomations = this.chatAutomations.filter(
-      (chatAutomation: ChatAutomation) => !_.isEqual(chatAutomation.uid, id)
+      (chatAutomation: ChatAutomation) => !_.isEqual(chatAutomation.id, id)
     );
 
     return Promise.resolve();
   }
 
-  public async activate(data: {
-    idToken: string;
-    telegramSessionKey: string;
-    chatAutomation: ChatAutomation;
-  }): Promise<any> {
+  public async activate(chatAutomation: ChatAutomation): Promise<any> {
     try {
+      console.log(chatAutomation);
+
       // if (_.isNil(this.chatAutomationsUserMap[userId])) {
       //   this.chatAutomationsUserMap[userId] = {
       //     telegramSessionKey: data.telegramSessionKey,
       //     automations: {
-      //       [data.chatAutomation.uid]: data.chatAutomation,
+      //       [data.chatAutomation.id]: data.chatAutomation,
       //     },
       //   };
       // } else {
       //   this.chatAutomationsUserMap[userId].automations[
-      //     data.chatAutomation.uid
+      //     data.chatAutomation.id
       //   ] = data.chatAutomation;
       // }
 
@@ -101,12 +99,9 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
     }
   }
 
-  public async deactivate(data: {
-    idToken: string;
-    chatAutomation: ChatAutomation;
-  }): Promise<any> {
+  public async deactivate(id: string): Promise<any> {
     // delete this.chatAutomationsUserMap[userId]?.automations[
-    //   data.chatAutomation.uid
+    //   data.chatAutomation.id
     // ];
     // LoggerUtils.log(
     //   "TelegramChatAutomationService",

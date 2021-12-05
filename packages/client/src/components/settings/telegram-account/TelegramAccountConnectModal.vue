@@ -9,7 +9,9 @@ import { StoreStateType } from '@/store';
     @click-outside="onEmitCloseModal()"
   >
     <template #header>
-      <h2 class="text-lg font-bold">Connect your telegram account</h2>
+      <h2 class="text-lg font-bold text-center">
+        Connect your telegram account
+      </h2>
     </template>
 
     <slot>
@@ -20,7 +22,12 @@ import { StoreStateType } from '@/store';
               >Enter your phone number in international format:</label
             >
 
-            <input type="text" class="text-input-box" v-model="phoneNumber" />
+            <input
+              type="text"
+              class="text-input-box"
+              placeholder="+441234567890"
+              v-model="phoneNumber"
+            />
 
             <p class="error-message" v-if="errorMessage !== ''">
               {{ errorMessage }}

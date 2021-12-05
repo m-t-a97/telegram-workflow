@@ -1,5 +1,5 @@
 export interface ChatAutomation {
-  uid: string;
+  id: string;
   name: string;
   sourceChatId: number;
   destinationChatIds: number[];

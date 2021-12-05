@@ -17,14 +17,7 @@ export abstract class AbstractChatAutomationService {
 
   public abstract delete(id: string): Promise<any>;
 
-  public abstract activate(data: {
-    idToken: string;
-    telegramSessionKey: string;
-    chatAutomation: ChatAutomation;
-  }): Promise<any>;
+  public abstract activate(chatAutomation: ChatAutomation): Promise<any>;
 
-  public abstract deactivate(data: {
-    idToken: string;
-    chatAutomation: ChatAutomation;
-  }): Promise<any>;
+  public abstract deactivate(id: string): Promise<any>;
 }

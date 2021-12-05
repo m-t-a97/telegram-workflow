@@ -101,7 +101,7 @@ function registerDebounceEffectOnChatAutomationNameInputEvent(): void {
         }
 
         await telegramChatsAutomationDaoService.update(
-          props.chatAutomation.uid,
+          props.chatAutomation.id,
           {
             name: updatedName,
           }
@@ -143,21 +143,20 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
             await axios.post(
               `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATION_ACTIVATE}`,
               {
-                telegramSessionKey: savedTelegramSession,
                 chatAutomation: props.chatAutomation,
               }
             );
           } else {
             await axios.post(
               `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATION_DEACTIVATE}`,
-              { chatAutomation: props.chatAutomation }
+              { id: props.chatAutomation.id }
             );
           }
 
           isActivatingAutomation.value = false;
 
           await telegramChatsAutomationDaoService.update(
-            props.chatAutomation.uid,
+            props.chatAutomation.id,
             {
               active: updatedActive,
             }

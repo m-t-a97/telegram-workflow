@@ -15,7 +15,7 @@ const useFetchTelegramChatAutomation = (): FetchChatAutomationHookType => {
     const chatAutomations = [...store.state.telegramStore.chatAutomations];
 
     return chatAutomations.find(
-      (chatAutomation: ChatAutomation) => chatAutomation.uid === id
+      (chatAutomation: ChatAutomation) => chatAutomation.id === id
     );
   };
 

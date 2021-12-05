@@ -163,7 +163,7 @@ function initialiseSelectedChatDestinations(): void {
 
 async function saveUpdatedSourceChat(chatId: number): Promise<void> {
   try {
-    await telegramChatsAutomationDaoService.update(props.chatAutomation.uid, {
+    await telegramChatsAutomationDaoService.update(props.chatAutomation.id, {
       sourceChatId: chatId,
     });
 
@@ -181,7 +181,7 @@ async function saveUpdatedSourceChat(chatId: number): Promise<void> {
 
 async function saveUpdatedDestinationChats(): Promise<void> {
   try {
-    await telegramChatsAutomationDaoService.update(props.chatAutomation.uid, {
+    await telegramChatsAutomationDaoService.update(props.chatAutomation.id, {
       destinationChatIds: selectedChatDestinations.value.map(
         (chatSelection: ChatSelectionType) => chatSelection.chatId
       ),
@@ -201,7 +201,7 @@ async function saveUpdatedDestinationChats(): Promise<void> {
 
 async function setIsTouched(): Promise<void> {
   if (!props.chatAutomation.touched) {
-    await telegramChatsAutomationDaoService.update(props.chatAutomation.uid, {
+    await telegramChatsAutomationDaoService.update(props.chatAutomation.id, {
       touched: true,
     });
   }
