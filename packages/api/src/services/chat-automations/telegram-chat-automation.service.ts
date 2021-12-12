@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 import _ from "lodash";
 
-import { ChatAutomation, IDUtils, LoggerUtils } from "@autogram/shared-core";
+import { ChatAutomation, IDUtils, LoggerUtils } from "@/shared-core";
 
 import { AbstractChatAutomationService } from "./abstract-chat-automation.service";
 

@@ -6,10 +6,9 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from "@nestjs/common";
 
-import { ChatAutomation } from "@autogram/shared-core";
+import { ChatAutomation } from "@/shared-core";
 
 import { AbstractChatAutomationService } from "src/services/chat-automations/abstract-chat-automation.service";
 

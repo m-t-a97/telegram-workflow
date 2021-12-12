@@ -1,4 +1,4 @@
-# Autogram Client
+# Telegram Workflow Client
 
 ```bash
 yarn build

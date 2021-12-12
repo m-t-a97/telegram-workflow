@@ -5,8 +5,6 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import path from "path";
 import _ from "lodash";
 
-import { AppController } from "../controllers/app.controller";
-import { AppService } from "../services/app.service";
 import { ChatAutomationsModule } from "./chat-automation.module";
 import { AuthModule } from "./auth.module";
 
@@ -30,7 +28,7 @@ import { AuthModule } from "./auth.module";
     AuthModule,
     ChatAutomationsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

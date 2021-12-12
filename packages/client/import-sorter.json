@@ -38,7 +38,7 @@
       "orderLevel": 20
     },
     {
-      "regex": "^@autogram",
+      "regex": "^@/shared-core",
       "orderLevel": 30
     },
     {

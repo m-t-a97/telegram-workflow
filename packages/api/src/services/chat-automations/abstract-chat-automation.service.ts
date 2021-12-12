@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
-import { ChatAutomation } from "@autogram/shared-core";
+import { ChatAutomation } from "@/shared-core";
 
 @Injectable()
 export abstract class AbstractChatAutomationService {

@@ -3,7 +3,7 @@ import path from "path";
 
 const configureModuleAliases = () => {
   addAliases({
-    "@autogram/shared-core": path.join(__dirname, "../../../shared-core"),
+    "@/shared-core": path.join(__dirname, "../../../shared-core"),
   });
 };
 

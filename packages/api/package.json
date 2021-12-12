@@ -1,5 +1,5 @@
 {
-  "name": "@telegram-automation/api",
+  "name": "@telegram-workflow/api",
   "version": "0.0.0",
   "private": true,
   "scripts": {

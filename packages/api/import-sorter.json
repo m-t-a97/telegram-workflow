@@ -34,11 +34,11 @@
       "orderLevel": 10
     },
     {
-      "regex": "^@(?!@autogram)\\w+",
+      "regex": "^@(?!@/shared-core)\\w+",
       "orderLevel": 20
     },
     {
-      "regex": "^@autogram",
+      "regex": "^@/shared-core",
       "orderLevel": 30
     },
     {

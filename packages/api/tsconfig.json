@@ -17,7 +17,7 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@autogram/shared-core": ["../shared-core"]
+      "@/shared-core": ["../shared-core"]
     }
   },
   "include": ["src", "../shared-core"]

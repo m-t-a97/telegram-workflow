@@ -1,5 +1,5 @@
 {
-  "name": "@telegram-automation/shared-core",
+  "name": "@telegram-workflow/shared-core",
   "version": "0.1.0",
   "scripts": {
     "build-test": "webpack",
