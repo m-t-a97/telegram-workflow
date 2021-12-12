@@ -1,4 +1,4 @@
-# Telegram Automation
+# Telegram Workflow
 
 A telegram forwarding app that allows you to create workflows to automate forwarding messages. Workflows consist of selecting a source chat and destination chats.
 
