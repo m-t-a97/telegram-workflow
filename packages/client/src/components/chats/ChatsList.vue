@@ -3,7 +3,7 @@
     <div
       :class="{ 'mb-4': index !== props.chats.length - 1 }"
       v-for="(chat, index) in props.chats"
-      :key="chat.id"
+      :key="chat.id.toString()"
     >
       <ChatsListItem :chat="chat" />
     </div>
@@ -19,7 +19,6 @@ interface Props {
   chats: Api.Chat[];
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 </script>
 

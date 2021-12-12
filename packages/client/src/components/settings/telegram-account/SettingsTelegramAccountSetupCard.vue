@@ -27,7 +27,7 @@
       </va-card-content>
     </va-card>
 
-    <TelegramAccountConnectModal
+    <SettingsTelegramAccountSetupCardConnectModal
       :showTelegramAccountSetupModal="showTelegramAccountSetupModal"
       @toggle-telegram-account-setup-modal="
         showTelegramAccountSetupModal = !showTelegramAccountSetupModal
@@ -45,7 +45,7 @@ import { VaCard, VaCardTitle, VaCardContent, VaButton } from "vuestic-ui";
 import { StoreStateType } from "@/store";
 import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
-import TelegramAccountConnectModal from "@/components/settings/telegram-account/TelegramAccountConnectModal.vue";
+import SettingsTelegramAccountSetupCardConnectModal from "@/components/settings/telegram-account/SettingsTelegramAccountSetupCardConnectModal.vue";
 
 const store: Store<StoreStateType> = useStore();
 

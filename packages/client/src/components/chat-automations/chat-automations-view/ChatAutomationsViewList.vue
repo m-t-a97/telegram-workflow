@@ -69,10 +69,8 @@ interface Props {
   isChatAutomationsBeingDeleted: boolean;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 
-// eslint-disable-next-line no-undef
 const emit = defineEmits(["list-item-toggled"]);
 
 const chatAutomationListItemCheckboxMap = ref<Record<string, boolean>>({});

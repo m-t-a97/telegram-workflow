@@ -33,10 +33,8 @@ interface Props {
   showTelegramAccountDisconnectModal: boolean;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 
-// eslint-disable-next-line no-undef
 const emit = defineEmits(["toggle-telegram-account-disconnect-modal"]);
 
 const store: Store<StoreStateType> = useStore();

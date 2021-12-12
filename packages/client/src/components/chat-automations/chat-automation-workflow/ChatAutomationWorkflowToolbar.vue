@@ -70,7 +70,6 @@ interface Props {
   isAutomationValid: boolean;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 
 const store: Store<StoreStateType> = useStore();

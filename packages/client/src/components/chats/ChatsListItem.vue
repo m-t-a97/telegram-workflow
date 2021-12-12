@@ -16,7 +16,6 @@ interface Props {
   chat: Api.Chat;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 </script>
 

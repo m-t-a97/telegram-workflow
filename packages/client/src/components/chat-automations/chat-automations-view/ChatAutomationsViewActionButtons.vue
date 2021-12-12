@@ -60,10 +60,8 @@ interface Props {
   chatAutomationsToggleStateMap: Record<string, boolean>;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 
-// eslint-disable-next-line no-undef
 const emit = defineEmits([
   "creating-new-automation",
   "deleting-chat-automations",

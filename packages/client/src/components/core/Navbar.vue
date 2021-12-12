@@ -13,7 +13,6 @@
 <script lang="ts" setup>
 import { VaIcon } from "vuestic-ui";
 
-// eslint-disable-next-line no-undef
 const emit = defineEmits(["show-sidebar"]);
 
 const appName = process.env.VUE_APP_PROJECT_NAME;

@@ -141,10 +141,8 @@ interface Props {
   showTelegramAccountSetupModal: boolean;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 
-// eslint-disable-next-line no-undef
 const emit = defineEmits(["toggle-telegram-account-setup-modal"]);
 
 const store: Store<StoreStateType> = useStore();
@@ -203,7 +201,11 @@ async function onSendCode(): Promise<void> {
       errorMessage.value = "Phone number is required";
     }
   } catch (error) {
-    LoggerUtils.error("TelegramLoginPage", "onSendCode", error);
+    LoggerUtils.error(
+      "SettingsTelegramAccountSetupCardConnectModal",
+      "onSendCode",
+      error
+    );
 
     errorMessage.value = error.message;
   }
@@ -233,7 +235,11 @@ async function onVerifyCode(): Promise<void> {
       errorMessage.value = "Verification code is required";
     }
   } catch (error) {
-    LoggerUtils.error("TelegramLoginPage", "onVerifyCode", error);
+    LoggerUtils.error(
+      "SettingsTelegramAccountSetupCardConnectModal",
+      "onVerifyCode",
+      error
+    );
 
     errorMessage.value = error.message;
   }
@@ -256,7 +262,11 @@ async function onTwoFactorPasswordEntered(): Promise<void> {
       errorMessage.value = "Two factor password is required";
     }
   } catch (error) {
-    LoggerUtils.error("TelegramLoginPage", "onTwoFactorPasswordEntered", error);
+    LoggerUtils.error(
+      "SettingsTelegramAccountSetupCardConnectModal",
+      "onTwoFactorPasswordEntered",
+      error
+    );
 
     errorMessage.value = error.message;
   }

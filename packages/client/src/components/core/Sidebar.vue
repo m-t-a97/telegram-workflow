@@ -50,10 +50,8 @@ interface Props {
   showSidebar: boolean;
 }
 
-// eslint-disable-next-line no-undef
 const props = defineProps<Props>();
 
-// eslint-disable-next-line no-undef
 const emit = defineEmits(["toggle-sidebar"]);
 
 function onToggleSidebar(): void {
