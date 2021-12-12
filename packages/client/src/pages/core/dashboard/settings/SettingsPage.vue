@@ -9,24 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted } from "vue";
-
-import _ from "lodash";
-import { Subscription } from "rxjs";
-
-import { RxjsHelperUtils } from "@shared-core";
-
 import SettingsTelegramAccountSetupCard from "@/components/settings/telegram-account/SettingsTelegramAccountSetupCard.vue";
-
-let user_$: Subscription;
-
-function initialise(): void {}
-
-onUnmounted(() => {
-  RxjsHelperUtils.unsubscribe(user_$);
-});
-
-initialise();
 </script>
 
 <style lang="scss" scoped>

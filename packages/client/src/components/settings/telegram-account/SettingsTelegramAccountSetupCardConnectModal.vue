@@ -1,4 +1,3 @@
-import { StoreStateType } from '@/store';
 <template>
   <va-modal
     v-model="showTelegramAccountSetupModalRef"
@@ -134,7 +133,8 @@ import { LoggerUtils, RxjsHelperUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
-import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
+import { APIEndpoints } from "@/constants/api-endpoints";
+import { IHttpService } from "@/services/http/i-http.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 
 interface Props {
@@ -147,9 +147,7 @@ const emit = defineEmits(["toggle-telegram-account-setup-modal"]);
 
 const store: Store<StoreStateType> = useStore();
 
-const telegramAuthService: ITelegramAuthService = inject(
-  ServiceProviderKeys.TELEGRAM_AUTH_SERVICE
-);
+const httpService: IHttpService = inject(ServiceProviderKeys.HTTP_SERVICE);
 
 const showModalInFullScreen = ref<boolean>(false);
 const showTelegramAccountSetupModalRef = ref<boolean>(false);
@@ -190,7 +188,15 @@ function watchScreenWidth(): void {
 async function onSendCode(): Promise<void> {
   try {
     if (!_.isEmpty(phoneNumber.value)) {
-      const data = await telegramAuthService.sendCode(phoneNumber.value);
+      const data = await httpService.post(
+        APIEndpoints.TELEGRAM_AUTH_SEND_CODE,
+        {
+          phoneNumber: phoneNumber.value,
+        }
+      );
+
+      console.log(data);
+
       phoneCodeHash = data.phoneCodeHash;
 
       isMobileNumberStep.value = false;
@@ -214,10 +220,13 @@ async function onSendCode(): Promise<void> {
 async function onVerifyCode(): Promise<void> {
   try {
     if (!_.isEmpty(authCode.value)) {
-      const { isPasswordRequired } = await telegramAuthService.signIn(
-        phoneNumber.value,
-        phoneCodeHash,
-        authCode.value
+      const { isPasswordRequired } = await httpService.post(
+        APIEndpoints.TELEGRAM_AUTH_SIGN_IN,
+        {
+          phoneNumber: phoneNumber.value,
+          phoneCodeHash,
+          phoneCode: authCode.value,
+        }
       );
 
       isAuthCodeStep.value = false;
@@ -248,8 +257,11 @@ async function onVerifyCode(): Promise<void> {
 async function onTwoFactorPasswordEntered(): Promise<void> {
   try {
     if (!_.isEmpty(twoFactorPassword.value)) {
-      await telegramAuthService.signInWithTwoFactorPassword(
-        twoFactorPassword.value
+      await httpService.post(
+        APIEndpoints.TELEGRAM_AUTH_SIGN_IN_WITH_TWO_FACTOR,
+        {
+          password: twoFactorPassword.value,
+        }
       );
 
       updateTelegramLoggedInState();

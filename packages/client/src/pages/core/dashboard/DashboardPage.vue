@@ -58,7 +58,6 @@ import { Store, useStore } from "vuex";
 
 import _ from "lodash";
 import { VaCard, VaCardContent, VaProgressBar, VaAlert } from "vuestic-ui";
-import { Api } from "telegram";
 import { catchError, of, Subscription, tap } from "rxjs";
 
 import { LoggerUtils, RxjsHelperUtils } from "@shared-core";
@@ -66,20 +65,19 @@ import { LoggerUtils, RxjsHelperUtils } from "@shared-core";
 import { StoreStateType } from "@/store";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
 import { ITelegramChatsService } from "@/services/telegram/chats/i-telegram-chats.service";
-import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 import { RoutePaths } from "@/constants/route-paths";
 import Navbar from "@/components/core/Navbar.vue";
 import Sidebar from "@/components/core/Sidebar.vue";
 import { EventsService } from "@/services/events/events.service";
+import { IHttpService } from "@/services/http/i-http.service";
+import { APIEndpoints } from "@/constants/api-endpoints";
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store: Store<StoreStateType> = useStore();
 
-const telegramAuthService: ITelegramAuthService = inject(
-  ServiceProviderKeys.TELEGRAM_AUTH_SERVICE
-);
+const httpService: IHttpService = inject(ServiceProviderKeys.HTTP_SERVICE);
 
 const telegramChatsService: ITelegramChatsService = inject(
   ServiceProviderKeys.TELEGRAM_CHATS_SERVICE
@@ -108,25 +106,23 @@ async function initialise(): Promise<void> {
   try {
     isInitialisingTelegram.value = true;
 
-    await telegramAuthService.initialise();
+    const isAuthorised = await httpService.get(
+      APIEndpoints.TELEGRAM_AUTH_IS_AUTHORISED
+    );
 
-    if (_.isEmpty(store.state.telegramStore.chats)) {
-      await fetchChats();
-    }
+    await store.dispatch(
+      TelegramStoreActions.UPDATE_IS_LOGGED_INTO_TELEGRAM,
+      isAuthorised
+    );
 
-    fetchChatAutomations();
+    // if (_.isEmpty(store.state.telegramStore.chats)) {
+    //   await fetchChats();
+    // }
+
+    // fetchChatAutomations();
     isInitialisingTelegram.value = false;
   } catch (error) {
     LoggerUtils.error("DashboardPage", "initialise", error);
-  }
-}
-
-async function watchChatUpdates(update: Api.TypeUpdate): Promise<void> {
-  if (
-    _.isEqual(update.className, "UpdateReadHistoryInbox") ||
-    _.isEqual(update.className, "UpdateReadHistoryOutbox")
-  ) {
-    await fetchChats();
   }
 }
 

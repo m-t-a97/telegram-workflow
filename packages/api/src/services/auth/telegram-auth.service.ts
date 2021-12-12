@@ -1,39 +1,43 @@
+import { Injectable, Logger } from "@nestjs/common";
+
 import _ from "lodash";
 import { Api, TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 
-import { LoggerUtils, RegexUtils } from "@shared-core";
-
-import { LocalStorageKeys } from "@/constants/local-storage-keys";
-import { LocalStorageService } from "../../storage/local-storage.service";
 import {
-  ITelegramAuthService,
+  LoggerUtils,
+  RegexUtils,
   SentCodeResultType,
   SignInResultType,
-} from "./i-telegram-auth.service";
-import { IHttpService } from "@/services/http/i-http.service";
-import { APIEndpoints } from "@/constants/api-endpoints";
+} from "@/shared-core";
 
-export class TelegramAuthService implements ITelegramAuthService {
+import { AbstractTelegramAuthService } from "./abstract-telegram-auth.service";
+import { AbstractAuthService } from "./abstract-auth.service";
+
+@Injectable()
+export class TelegramAuthService extends AbstractTelegramAuthService {
   private apiId: number;
   private apiHash: string;
   private stringSession: StringSession;
 
   private client: TelegramClient;
 
-  constructor(private readonly httpService: IHttpService) {}
+  constructor(private readonly authService: AbstractAuthService) {
+    super();
+    this.initialise();
+  }
 
   public async initialise(): Promise<void> {
     try {
-      const { apiId, apiHash } = await this.httpService.get(
-        APIEndpoints.AUTH_FETCH_API_CREDENTIALS
-      );
+      const { apiId, apiHash } = await this.authService.fetchApiCredentials();
 
       this.apiId = parseInt(apiId);
       this.apiHash = apiHash;
 
-      const savedSessionString: string = await this.loadSessionString();
-      this.stringSession = new StringSession(savedSessionString);
+      // TODO: using for testing purposes so we don't need to keep authenticating on the server side whenever code is updated.
+      const stringSessonTest =
+        "1BAAOMTQ5LjE1NC4xNjcuOTEAULP5hxLBPrrh8p5hdYZrCF9KKPtAOzZ9OmdVTTCQ2xL+Qt3O/fRJMDxnqmOtdMBCWGu0sYHXbQojdreR6qe2ePqAJGf8hKVw8oVoR3Sd1hEOxrBOPkF7EtSItpDJ1W1/OCZsyzQ2/1pLcTo40RGr3WeepogougbrrkfIhQjN43ONaLD5sBhqAzLKAs0vTs4Hr2kpNduzROYxhib6ymTcLm8lnu+LRtFGf98mvSiohnCHZY/r8FfWdY+VyEc+902zAV8QLpzFTSI31L0a7ooCU4yM/Au61N14TclshoBzXTQGR+fU7gyO7Kz3/P5XxPb7yx1Z2OWqZuyJtzw6pm+a4GI=";
+      this.stringSession = new StringSession(stringSessonTest);
       await this.stringSession.load();
 
       this.client = new TelegramClient(
@@ -48,21 +52,6 @@ export class TelegramAuthService implements ITelegramAuthService {
       await this.client.connect();
     } catch (error) {
       LoggerUtils.error("TelegramAuthService", "initialise", error);
-    }
-  }
-
-  private async loadSessionString(): Promise<string> {
-    try {
-      const savedTelegramSession: string =
-        await LocalStorageService.getItem<string>(
-          LocalStorageKeys.SAVED_TELEGRAM_SESSION
-        );
-
-      return !_.isNil(savedTelegramSession)
-        ? Promise.resolve(savedTelegramSession)
-        : Promise.resolve("");
-    } catch (error) {
-      LoggerUtils.error("TelegramAuthService", "loadSessionString", error);
     }
   }
 
@@ -101,10 +90,7 @@ export class TelegramAuthService implements ITelegramAuthService {
             new Api.auth.SignIn({ phoneNumber, phoneCodeHash, phoneCode })
           );
 
-          await LocalStorageService.setItem(
-            LocalStorageKeys.SAVED_TELEGRAM_SESSION,
-            this.stringSession.save()
-          );
+          this.stringSession.save();
 
           return Promise.resolve({ isPasswordRequired: false });
         } else {
@@ -144,10 +130,7 @@ export class TelegramAuthService implements ITelegramAuthService {
         }
       );
 
-      await LocalStorageService.setItem(
-        LocalStorageKeys.SAVED_TELEGRAM_SESSION,
-        this.stringSession.save()
-      );
+      this.stringSession.save();
     } catch (error) {
       LoggerUtils.error(
         "TelegramAuthService",
@@ -181,9 +164,6 @@ export class TelegramAuthService implements ITelegramAuthService {
 
   public async disconnect(): Promise<void> {
     try {
-      await LocalStorageService.removeItem(
-        LocalStorageKeys.SAVED_TELEGRAM_SESSION
-      );
       await this.client.disconnect();
     } catch (error) {
       LoggerUtils.error("TelegramAuthService", "disconnect", error);

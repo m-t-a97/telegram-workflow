@@ -6,3 +6,4 @@ export * from "./firebase/firebase-error-code-transformer";
 export * from "./mail/mail-data.model";
 export * from "./telegram/chat-automation.model";
 export * from "./telegram/telegram-account-details.model";
+export * from "./telegram/telegram-auth-types";

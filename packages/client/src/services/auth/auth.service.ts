@@ -15,7 +15,7 @@ export class AuthService implements IAuthService {
     try {
       const isAuthKeyVerified = await this.httpService.post<{
         authKey: string;
-      }>(APIEndpoints.VERIFY_AUTH_KEY, {
+      }>(APIEndpoints.AUTH_VERIFY_AUTH_KEY, {
         authKey,
       });
 

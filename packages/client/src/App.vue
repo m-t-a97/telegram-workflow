@@ -38,6 +38,7 @@ const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
   new ApiTelegramChatsAutomationDaoService(httpService);
 
 provide(ServiceProviderKeys.AUTH_SERVICE, authService);
+provide(ServiceProviderKeys.HTTP_SERVICE, httpService);
 
 provide(ServiceProviderKeys.TELEGRAM_AUTH_SERVICE, telegramAuthService);
 provide(ServiceProviderKeys.TELEGRAM_CHATS_SERVICE, telegramChatsService);

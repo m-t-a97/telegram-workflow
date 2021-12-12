@@ -15,7 +15,7 @@ export class ApiTelegramChatsAutomationDaoService
   public async create(): Promise<ChatAutomationCreatedResultType> {
     try {
       const { uid } = await this.httpService.get<{ uid: string }>(
-        APIEndpoints.CHAT_AUTOMATION_CREATE
+        APIEndpoints.CHAT_AUTOMATIONS_CREATE
       );
 
       return Promise.resolve({

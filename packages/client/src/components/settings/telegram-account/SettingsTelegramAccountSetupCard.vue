@@ -43,32 +43,26 @@ import { Store, useStore } from "vuex";
 import { VaCard, VaCardTitle, VaCardContent, VaButton } from "vuestic-ui";
 
 import { StoreStateType } from "@/store";
-import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import SettingsTelegramAccountSetupCardConnectModal from "@/components/settings/telegram-account/SettingsTelegramAccountSetupCardConnectModal.vue";
+import { IHttpService } from "@/services/http/i-http.service";
+import { APIEndpoints } from "@/constants/api-endpoints";
 
 const store: Store<StoreStateType> = useStore();
 
-const telegramAuthService: ITelegramAuthService = inject(
-  ServiceProviderKeys.TELEGRAM_AUTH_SERVICE
-);
+const httpService: IHttpService = inject(ServiceProviderKeys.HTTP_SERVICE);
 
 const isConnectedToTelegram = ref<boolean>(false);
 const showTelegramAccountSetupModal = ref<boolean>(false);
 const reconnectingToTelegram = ref<boolean>(false);
 
 async function onOpenTelegramAccountSetupModal(): Promise<void> {
-  if (!isConnectedToTelegram.value) {
-    const isTelegramClientConnected = await telegramAuthService.isConnected();
+  // isConnectedToTelegram.value = await httpService.get(
+  //   APIEndpoints.TELEGRAM_AUTH_IS_AUTHORISED
+  // );
 
-    if (!isTelegramClientConnected) {
-      reconnectingToTelegram.value = true;
-      await telegramAuthService.initialise();
-    }
-
-    reconnectingToTelegram.value = false;
-    showTelegramAccountSetupModal.value = true;
-  }
+  // reconnectingToTelegram.value = false;
+  showTelegramAccountSetupModal.value = true;
 }
 
 watchEffect(() => {
