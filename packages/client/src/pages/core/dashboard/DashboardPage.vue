@@ -169,10 +169,17 @@ onUnmounted(() => {
 watchEffect(() => {
   currentRoutePath.value = route.path;
 
-  if (route.path.indexOf(RoutePaths.CHAT_AUTOMATION_WORKFLOW) !== -1) {
+  const isChatAutomationWorkflowPath =
+    route.path.indexOf(RoutePaths.CHAT_AUTOMATION_WORKFLOW) !== -1;
+
+  if (isChatAutomationWorkflowPath) {
     isNavbarVisible.value = false;
   } else {
     isNavbarVisible.value = true;
+  }
+
+  if (isCurrentRouteDashboardOnly.value) {
+    initialise();
   }
 });
 
