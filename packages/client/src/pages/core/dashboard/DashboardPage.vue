@@ -177,10 +177,6 @@ watchEffect(() => {
   } else {
     isNavbarVisible.value = true;
   }
-
-  if (isCurrentRouteDashboardOnly.value) {
-    initialise();
-  }
 });
 
 initialise();

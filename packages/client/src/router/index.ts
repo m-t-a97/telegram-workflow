@@ -11,7 +11,6 @@ import NotFoundPage from "@/pages/home/NotFoundPage.vue";
 import HOME_ROUTES from "./routes/home.routes";
 import CORE_ROUTES from "./routes/core.routes";
 import authRouteGuard from "./guards/auth/auth.guard";
-import telegramRouteGuard from "./guards/telegram/telegram-route.guard";
 
 const routes: RouteRecordRaw[] = [
   ...HOME_ROUTES,
