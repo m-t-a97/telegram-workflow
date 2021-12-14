@@ -12,12 +12,7 @@ async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule, {
     cors: {
       methods: ["GET", "POST", "PUT", "DELETE"],
-      origin: [
-        "http://localhost:8080",
-        !_.isEqual(process.env.NODE_ENV, "production")
-          ? "http://localhost:3000"
-          : "",
-      ],
+      origin: ["http://localhost:8080", "http://localhost:3000"],
     },
   });
 

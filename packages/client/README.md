@@ -1,5 +1,9 @@
 # Telegram Workflow Client
 
+## Development
+
 ```bash
-yarn build
+yarn serve
 ```
+
+---

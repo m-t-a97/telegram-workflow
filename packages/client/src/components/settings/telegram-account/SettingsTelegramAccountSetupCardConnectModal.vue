@@ -195,8 +195,6 @@ async function onSendCode(): Promise<void> {
         }
       );
 
-      console.log(data);
-
       phoneCodeHash = data.phoneCodeHash;
 
       isMobileNumberStep.value = false;
