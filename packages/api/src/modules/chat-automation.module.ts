@@ -1,16 +1,27 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 
-import { ChatAutomationsController } from "src/controllers/chat-automations/chat-automations.controller";
-import { AbstractChatAutomationService } from "src/services/chat-automations/abstract-chat-automation.service";
-import { TelegramChatAutomationService } from "src/services/chat-automations/telegram-chat-automation.service";
+import { TelegramChatAutomationsController } from "src/controllers/chat-automations/telegram-chat-automations.controller";
+import { AbstractTelegramChatAutomationsDaoService } from "src/services/chat-automations/abstract-telegram-chat-automations-dao.service";
+import { AbstractTelegramChatAutomationsHandlerService } from "src/services/chat-automations/abstract-telegram-chat-automations-handler.service";
+import { TelegramChatAutomationsDaoService } from "src/services/chat-automations/telegram-chat-automations-dao.service";
+import { TelegramChatAutomationsHandlerService } from "src/services/chat-automations/telegram-chat-automations-handler.service";
+import { AuthModule } from "./auth.module";
 
 @Module({
-  imports: [],
-  controllers: [ChatAutomationsController],
+  imports: [forwardRef(() => AuthModule)],
+  exports: [
+    AbstractTelegramChatAutomationsDaoService,
+    AbstractTelegramChatAutomationsHandlerService,
+  ],
+  controllers: [TelegramChatAutomationsController],
   providers: [
     {
-      provide: AbstractChatAutomationService,
-      useClass: TelegramChatAutomationService,
+      provide: AbstractTelegramChatAutomationsDaoService,
+      useClass: TelegramChatAutomationsDaoService,
+    },
+    {
+      provide: AbstractTelegramChatAutomationsHandlerService,
+      useClass: TelegramChatAutomationsHandlerService,
     },
   ],
 })

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 import _ from "lodash";
 import { Api, TelegramClient } from "telegram";
@@ -13,6 +13,7 @@ import {
 
 import { AbstractTelegramAuthService } from "./abstract-telegram-auth.service";
 import { AbstractAuthService } from "./abstract-auth.service";
+import { AbstractTelegramChatAutomationsHandlerService } from "../chat-automations/abstract-telegram-chat-automations-handler.service";
 
 @Injectable()
 export class TelegramAuthService extends AbstractTelegramAuthService {
@@ -22,7 +23,12 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
   private client: TelegramClient;
 
-  constructor(private readonly authService: AbstractAuthService) {
+  private subscription: any;
+
+  constructor(
+    private readonly authService: AbstractAuthService,
+    private readonly telegramChatAutomationsHandlerService: AbstractTelegramChatAutomationsHandlerService
+  ) {
     super();
     this.initialise();
   }
@@ -92,6 +98,8 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
           this.stringSession.save();
 
+          this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler();
+
           return Promise.resolve({ isPasswordRequired: false });
         } else {
           return Promise.reject({ message: "Code must be digits only." });
@@ -131,6 +139,8 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
       );
 
       this.stringSession.save();
+
+      this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler();
     } catch (error) {
       LoggerUtils.error(
         "TelegramAuthService",
@@ -164,6 +174,7 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
   public async disconnect(): Promise<void> {
     try {
+      this.telegramChatAutomationsHandlerService.unsubscribeFromNewMessageEventHandler();
       await this.client.disconnect();
     } catch (error) {
       LoggerUtils.error("TelegramAuthService", "disconnect", error);

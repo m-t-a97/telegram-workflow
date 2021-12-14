@@ -1,12 +1,12 @@
 <template>
   <div class="chat-automation-workflow-container">
     <ChatAutomationWorkflowToolbar
-      :chatAutomation="currentChatAutomation"
+      :chatAutomation="chatAutomation"
       :isAutomationValid="isAutomationValid"
     />
 
     <ChatAutomationWorkflowChatsSelection
-      :chatAutomation="currentChatAutomation"
+      :chatAutomation="chatAutomation"
       @is-automation-valid="onIsAutomationValid($event)"
     />
   </div>
@@ -26,7 +26,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const currentChatAutomation = computed(() => props.chatAutomation);
+const chatAutomation = computed(() => props.chatAutomation);
 
 const isAutomationValid = ref<boolean>(false);
 

@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { ChatAutomation } from "@/shared-core";
 
 @Injectable()
-export abstract class AbstractChatAutomationService {
+export abstract class AbstractTelegramChatAutomationsDaoService {
   public abstract create(): Promise<{ id: string }>;
 
   public abstract getAll(): Promise<ChatAutomation[]>;
@@ -16,8 +16,4 @@ export abstract class AbstractChatAutomationService {
   ): Promise<any>;
 
   public abstract delete(id: string): Promise<any>;
-
-  public abstract activate(chatAutomation: ChatAutomation): Promise<any>;
-
-  public abstract deactivate(id: string): Promise<any>;
 }

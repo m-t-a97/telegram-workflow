@@ -41,7 +41,6 @@
 import { computed, inject, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { Router } from "vue-router";
-import { Store, useStore } from "vuex";
 
 import _ from "lodash";
 import { VaSwitch, VaIcon, VaInput } from "vuestic-ui";
@@ -53,16 +52,11 @@ import {
   Subscription,
   tap,
 } from "rxjs";
-import axios from "axios";
 
 import { ChatAutomation, LoggerUtils, RxjsHelperUtils } from "@shared-core";
 
-import { StoreStateType } from "@/store";
-import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
-import { APIEndpoints } from "@/constants/api-endpoints";
-import { LocalStorageService } from "@/services/storage/local-storage.service";
-import { LocalStorageKeys } from "@/constants/local-storage-keys";
 
 interface Props {
   chatAutomation: ChatAutomation;
@@ -71,10 +65,9 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const store: Store<StoreStateType> = useStore();
 const router: Router = useRouter();
 
-const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
+const telegramChatsAutomationDaoService: ITelegramChatAutomationsDaoService =
   inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
 
 const isAutomationValidComputed = computed(() => props.isAutomationValid);
@@ -131,32 +124,14 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
 
           isActivatingAutomation.value = true;
 
-          const savedTelegramSession = await LocalStorageService.getItem(
-            LocalStorageKeys.SAVED_TELEGRAM_SESSION
-          );
-
-          if (updatedActive) {
-            await axios.post(
-              `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATIONS_ACTIVATE}`,
-              {
-                chatAutomation: props.chatAutomation,
-              }
-            );
-          } else {
-            await axios.post(
-              `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATIONS_DEACTIVATE}`,
-              { id: props.chatAutomation.id }
-            );
-          }
-
-          isActivatingAutomation.value = false;
-
           await telegramChatsAutomationDaoService.update(
             props.chatAutomation.id,
             {
               active: updatedActive,
             }
           );
+
+          isActivatingAutomation.value = false;
         } catch (error) {
           LoggerUtils.error(
             "ChatAutomationWorkflowToolbar",

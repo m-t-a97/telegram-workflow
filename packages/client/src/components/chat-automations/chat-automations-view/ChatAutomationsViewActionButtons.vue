@@ -51,7 +51,7 @@ import { VaButtonGroup, VaButton, VaCheckbox } from "vuestic-ui";
 import { ChatAutomation, LoggerUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
-import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { RoutePaths } from "@/constants/route-paths";
 
@@ -71,7 +71,7 @@ const emit = defineEmits([
 const store: Store<StoreStateType> = useStore();
 const router: Router = useRouter();
 
-const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
+const telegramChatsAutomationDaoService: ITelegramChatAutomationsDaoService =
   inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
 
 const chatAutomationsComputed = computed<ChatAutomation[]>(

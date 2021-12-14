@@ -12,12 +12,12 @@ import { ITelegramAuthService } from "./services/telegram/auth/i-telegram-auth.s
 import { TelegramAuthService } from "./services/telegram/auth/telegram-auth.service";
 import { ITelegramChatsService } from "./services/telegram/chats/i-telegram-chats.service";
 import { TelegramChatsService } from "./services/telegram/chats/telegram-chats.service";
-import { ITelegramChatsAutomationDaoService } from "./services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ITelegramChatAutomationsDaoService } from "./services/telegram/chats/i-telegram-chat-automations-dao.service";
 import { IAuthService } from "./services/auth/i-auth.service";
 import { AuthService } from "./services/auth/auth.service";
 import { IHttpService } from "./services/http/i-http.service";
 import { AxiosHttpService } from "./services/http/axios-http.service";
-import { ApiTelegramChatsAutomationDaoService } from "./services/telegram/chats/api-telegram-chats-automation-dao.service";
+import { ApiTelegramChatAutomationsDaoService } from "./services/telegram/chats/api-telegram-chat-automations-dao.service";
 
 // --------------------------
 // Injecting Dependencies
@@ -34,8 +34,8 @@ const telegramChatsService: ITelegramChatsService = new TelegramChatsService(
   telegramAuthService as TelegramAuthService
 );
 
-const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
-  new ApiTelegramChatsAutomationDaoService(httpService);
+const telegramChatsAutomationDaoService: ITelegramChatAutomationsDaoService =
+  new ApiTelegramChatAutomationsDaoService(httpService);
 
 provide(ServiceProviderKeys.AUTH_SERVICE, authService);
 provide(ServiceProviderKeys.HTTP_SERVICE, httpService);

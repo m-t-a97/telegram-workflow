@@ -7,7 +7,7 @@ export type ChatAutomationCreatedResultType = {
 /**
  * An interface for implementing custom telegram chat automations.
  */
-export interface ITelegramChatsAutomationDaoService {
+export interface ITelegramChatAutomationsDaoService {
   /**
    * Creates a new chat automation
    * @returns {Promise<ChatAutomationCreatedResultType>} Promise<ChatAutomationCreatedResultType>

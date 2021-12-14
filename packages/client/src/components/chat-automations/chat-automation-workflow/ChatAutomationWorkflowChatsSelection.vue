@@ -37,7 +37,7 @@ import { ChatAutomation, LoggerUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
-import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 
 interface Props {
   chatAutomation: ChatAutomation;
@@ -57,7 +57,7 @@ type ChatSelectionType = {
 
 const store: Store<StoreStateType> = useStore();
 
-const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
+const telegramChatsAutomationDaoService: ITelegramChatAutomationsDaoService =
   inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
 
 const chatsOptions = ref<ChatSelectionType[]>([]);
@@ -88,7 +88,7 @@ function mapAllChatsToChatSelections(): void {
   chatsOptions.value = chats.map((chat: Api.TypeChat, index: number) => {
     type GroupOrChannel = Api.Chat | Api.Channel;
 
-    const isChannel = _.isEqual(chat.className.toLowerCase(), "channel");
+    const isChannel = _.has(chat, "broadcast");
     const chatId = isChannel
       ? parseInt(`-100${chat.id}`)
       : parseInt(`-${chat.id}`);

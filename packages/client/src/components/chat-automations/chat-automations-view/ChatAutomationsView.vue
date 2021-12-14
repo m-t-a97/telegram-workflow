@@ -47,11 +47,11 @@ import { StoreStateType } from "@/store";
 import ChatAutomationsViewActionButtons from "../chat-automations-view/ChatAutomationsViewActionButtons.vue";
 import ChatAutomationsViewList from "../chat-automations-view/ChatAutomationsViewList.vue";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
-import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
+import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 
 const store: Store<StoreStateType> = useStore();
 
-const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
+const telegramChatsAutomationDaoService: ITelegramChatAutomationsDaoService =
   inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
 
 const isFetchingChatAutomations = ref<boolean>(false);

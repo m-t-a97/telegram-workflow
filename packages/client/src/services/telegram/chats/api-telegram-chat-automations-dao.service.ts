@@ -5,12 +5,12 @@ import { APIEndpoints } from "@/constants/api-endpoints";
 import { IHttpService } from "@/services/http/i-http.service";
 import {
   ChatAutomationCreatedResultType,
-  ITelegramChatsAutomationDaoService,
-} from "./i-telegram-chats-automation-dao.service";
+  ITelegramChatAutomationsDaoService,
+} from "./i-telegram-chat-automations-dao.service";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
 
-export class ApiTelegramChatsAutomationDaoService
-  implements ITelegramChatsAutomationDaoService
+export class ApiTelegramChatAutomationsDaoService
+  implements ITelegramChatAutomationsDaoService
 {
   constructor(private readonly httpService: IHttpService) {}
 

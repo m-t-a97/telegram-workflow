@@ -18,7 +18,7 @@ export class TelegramAuthController {
 
       return isClientConnected && isAuthorised;
     } catch (error) {
-      Logger.error(error.message, "[TelegramAuthController][isAuthorised]");
+      Logger.error(error.message, "TelegramAuthController:isAuthorised");
     }
 
     return false;
