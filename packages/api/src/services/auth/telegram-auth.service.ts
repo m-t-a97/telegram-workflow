@@ -40,7 +40,7 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
       // TODO: using for testing purposes so we don't need to keep authenticating on the server side whenever code is updated.
       const stringSessonTest =
-        "1BAAOMTQ5LjE1NC4xNjcuOTEAULP5hxLBPrrh8p5hdYZrCF9KKPtAOzZ9OmdVTTCQ2xL+Qt3O/fRJMDxnqmOtdMBCWGu0sYHXbQojdreR6qe2ePqAJGf8hKVw8oVoR3Sd1hEOxrBOPkF7EtSItpDJ1W1/OCZsyzQ2/1pLcTo40RGr3WeepogougbrrkfIhQjN43ONaLD5sBhqAzLKAs0vTs4Hr2kpNduzROYxhib6ymTcLm8lnu+LRtFGf98mvSiohnCHZY/r8FfWdY+VyEc+902zAV8QLpzFTSI31L0a7ooCU4yM/Au61N14TclshoBzXTQGR+fU7gyO7Kz3/P5XxPb7yx1Z2OWqZuyJtzw6pm+a4GI=";
+        "1BAAOMTQ5LjE1NC4xNjcuOTEAUEw+mBMihd5Yy4lWrZ4iaDIED5dDl8NyDxSKPX5kQMngK0Z8rMzDbWBWbmofJHOo/qdf3nLAKIbsn74AUZHUq8atkeaG/F4F7oY4QNcZ8OANZlf2lFxy0xx0DR1oig+op+wPFTJnvOkRY64/w9s61dQ3kOm8rFOXKKfoSk02eRFq2gZ9eXG3mVOK6zMWVc1NssxtYo3ZwKzvvxoKkGwB/MgGaYBBaWeqTommdHUGTqA32PPhUz7ynWe+CA7cGBYY/jcbCzUrr8yILdVO1OSCVG64+Ey5hSeN80akkb6EUISYRFA0JaLiRiHoeB1GK5LRYzh7/qG5jyJ+x2TWMxNvVXY=";
       this.stringSession = new StringSession(stringSessonTest);
       await this.stringSession.load();
 
@@ -141,7 +141,7 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
         }
       );
 
-      this.stringSession.save();
+      console.log(this.stringSession.save());
 
       this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler(
         this.client

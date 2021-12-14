@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { createHmac } from "crypto";
 
 import { LoggerUtils } from "@shared-core";
 
@@ -13,14 +14,20 @@ export class AuthService implements IAuthService {
 
   public async signIn(authKey: string): Promise<boolean> {
     try {
+      const hashedAuthKey: string = createHmac("sha256", authKey).digest("hex");
+
       const isAuthKeyVerified = await this.httpService.post<{
         authKey: string;
       }>(APIEndpoints.AUTH_VERIFY_AUTH_KEY, {
-        authKey,
+        authKey: hashedAuthKey,
       });
 
       if (isAuthKeyVerified) {
-        await LocalStorageService.setItem(LocalStorageKeys.AUTH_KEY, authKey);
+        await LocalStorageService.setItem(
+          LocalStorageKeys.AUTH_KEY,
+          hashedAuthKey
+        );
+
         return Promise.resolve(true);
       } else {
         return Promise.reject({ message: "Auth key is invalid" });

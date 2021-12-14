@@ -1,7 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import _ from "lodash";
+import { createHmac } from "crypto";
 
 import { EnvironmentVariables } from "src/constants/environment-variables";
 import { AbstractAuthService } from "./abstract-auth.service";
@@ -15,9 +16,16 @@ export class AuthService extends AbstractAuthService {
   }
 
   public async isAuthKeyVerified(authKey: string): Promise<boolean> {
-    return Promise.resolve(
-      _.isEqual(authKey, this.configService.get<string>("AUTH_KEY"))
-    );
+    try {
+      const hashedAuthKey: string = createHmac(
+        "sha256",
+        this.configService.get<string>("AUTH_KEY")
+      ).digest("hex");
+
+      return Promise.resolve(_.isEqual(authKey, hashedAuthKey));
+    } catch (error) {
+      Logger.error(error.message, "AuthService:isAuthKeyVerified");
+    }
   }
 
   public async fetchApiCredentials(): Promise<{
