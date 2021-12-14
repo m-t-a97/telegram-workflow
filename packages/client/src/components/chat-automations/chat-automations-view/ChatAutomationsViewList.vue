@@ -75,10 +75,10 @@ const emit = defineEmits(["list-item-toggled"]);
 
 const chatAutomationListItemCheckboxMap = ref<Record<string, boolean>>({});
 
-function onCheckedListItem(uid: string) {
+function onCheckedListItem(id: string) {
   emit("list-item-toggled", {
-    uid,
-    value: chatAutomationListItemCheckboxMap.value[uid],
+    id,
+    value: chatAutomationListItemCheckboxMap.value[id],
   });
 }
 

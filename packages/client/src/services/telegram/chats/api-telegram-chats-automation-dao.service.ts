@@ -1,11 +1,13 @@
 import { ChatAutomation, LoggerUtils } from "@shared-core";
 
+import store from "@/store";
 import { APIEndpoints } from "@/constants/api-endpoints";
 import { IHttpService } from "@/services/http/i-http.service";
 import {
   ChatAutomationCreatedResultType,
   ITelegramChatsAutomationDaoService,
 } from "./i-telegram-chats-automation-dao.service";
+import { TelegramStoreActions } from "@/store/modules/telegram.store";
 
 export class ApiTelegramChatsAutomationDaoService
   implements ITelegramChatsAutomationDaoService
@@ -14,12 +16,14 @@ export class ApiTelegramChatsAutomationDaoService
 
   public async create(): Promise<ChatAutomationCreatedResultType> {
     try {
-      const { uid } = await this.httpService.get<{ uid: string }>(
+      const { id } = await this.httpService.get<{ id: string }>(
         APIEndpoints.CHAT_AUTOMATIONS_CREATE
       );
 
+      await this.getAll();
+
       return Promise.resolve({
-        uid,
+        id,
       });
     } catch (error) {
       LoggerUtils.error(
@@ -33,9 +37,16 @@ export class ApiTelegramChatsAutomationDaoService
   }
 
   public async getAll(): Promise<ChatAutomation[]> {
-    return this.httpService.get<ChatAutomation[]>(
+    const chatAutomations = await this.httpService.get<ChatAutomation[]>(
       APIEndpoints.CHAT_AUTOMATIONS
     );
+
+    await store.dispatch(
+      TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATIONS,
+      chatAutomations
+    );
+
+    return chatAutomations;
   }
 
   public async getOne(id: string): Promise<ChatAutomation> {

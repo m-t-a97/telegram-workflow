@@ -1,5 +1,5 @@
 export interface Bot {
-  uid: string;
+  id: string;
   name: string;
   tokenID: string;
 }

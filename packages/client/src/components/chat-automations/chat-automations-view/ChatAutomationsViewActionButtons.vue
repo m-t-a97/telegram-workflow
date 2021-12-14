@@ -91,9 +91,8 @@ async function onCreateNewAutomation(): Promise<void> {
   try {
     emit("creating-new-automation");
     isNewAutomationCreationInProgress.value = true;
-
-    const { uid } = await telegramChatsAutomationDaoService.create();
-    newlyCreatedChatAutomationId.value = uid;
+    const { id } = await telegramChatsAutomationDaoService.create();
+    newlyCreatedChatAutomationId.value = id;
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationsActionButtons",
@@ -141,29 +140,23 @@ function watchForChanges(): void {
 
 function watchChangesOnChatAutomationsFromStore(): void {
   watchEffect(() => {
-    if (!isNewAutomationCreationInProgress.value) {
-      chatAutomations.value = chatAutomationsComputed.value;
-    }
-
     if (isNewAutomationCreationInProgress.value) {
-      navigateToChatAutomationWorkflowAfterCreatingNewAutomation();
+      if (!_.isEmpty(newlyCreatedChatAutomationId.value)) {
+        router.push({
+          name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
+          params: {
+            id: newlyCreatedChatAutomationId.value,
+          },
+        });
+      }
+    } else {
+      chatAutomations.value = chatAutomationsComputed.value;
     }
 
     if (isChatAutomationsBeingDeleted.value) {
       updateUIAfterDeletingAutomations();
     }
   });
-}
-
-async function navigateToChatAutomationWorkflowAfterCreatingNewAutomation(): Promise<void> {
-  setTimeout(async () => {
-    await router.push({
-      name: RoutePaths.CHAT_AUTOMATION_WORKFLOW,
-      params: {
-        id: newlyCreatedChatAutomationId.value,
-      },
-    });
-  }, 100);
 }
 
 function updateUIAfterDeletingAutomations(): void {

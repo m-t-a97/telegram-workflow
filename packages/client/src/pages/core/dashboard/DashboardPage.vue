@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div class="dashboard-page-container">
     <va-progress-bar v-if="isInitialisingTelegram" indeterminate />
 
     <template v-if="!isInitialisingTelegram">
@@ -103,7 +103,6 @@ async function initialise(): Promise<void> {
     );
 
     await fetchChats();
-    await fetchChatAutomations();
     isInitialisingTelegram.value = false;
   } catch (error) {
     LoggerUtils.error("DashboardPage", "initialise", error);
@@ -116,21 +115,6 @@ async function fetchChats(): Promise<void> {
     await store.dispatch(TelegramStoreActions.UPDATE_TELEGRAM_CHATS, chats);
   } catch (error) {
     LoggerUtils.error("DashboardPage", "fetchChats", error);
-  }
-}
-
-async function fetchChatAutomations(): Promise<void> {
-  try {
-    const chatAutomations = await httpService.get(
-      APIEndpoints.CHAT_AUTOMATIONS
-    );
-
-    await store.dispatch(
-      TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATIONS,
-      chatAutomations
-    );
-  } catch (error) {
-    LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
   }
 }
 
@@ -155,7 +139,7 @@ initialise();
 </script>
 
 <style lang="scss" scoped>
-.dashboard-container {
+.dashboard-page-container {
   @apply h-full w-full overflow-auto;
 
   .link-cards-container {

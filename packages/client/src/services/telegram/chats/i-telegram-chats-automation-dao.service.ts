@@ -1,7 +1,7 @@
 import { ChatAutomation } from "@shared-core";
 
 export type ChatAutomationCreatedResultType = {
-  uid: string;
+  id: string;
 };
 
 /**

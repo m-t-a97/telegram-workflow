@@ -36,18 +36,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, inject } from "vue";
 import { Store, useStore } from "vuex";
 
 import { VaProgressCircle } from "vuestic-ui";
 
-import { ChatAutomation } from "@shared-core";
+import { ChatAutomation, LoggerUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
 import ChatAutomationsViewActionButtons from "../chat-automations-view/ChatAutomationsViewActionButtons.vue";
 import ChatAutomationsViewList from "../chat-automations-view/ChatAutomationsViewList.vue";
+import { ServiceProviderKeys } from "@/services/service-provider-keys";
+import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 
 const store: Store<StoreStateType> = useStore();
+
+const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
+  inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
 
 const isFetchingChatAutomations = ref<boolean>(false);
 const isCreatingNewAutomation = ref<boolean>(false);
@@ -61,15 +66,21 @@ const storeChatAutomationsComputed = computed(
 );
 
 async function fetchChatAutomations(): Promise<void> {
-  isFetchingChatAutomations.value = true;
-  chatAutomations.value = storeChatAutomationsComputed.value;
-  storeReferenceToAllAutomationsInsideToggleMap();
-  isFetchingChatAutomations.value = false;
+  try {
+    isFetchingChatAutomations.value = true;
+    const chatAutomationsFetched =
+      await telegramChatsAutomationDaoService.getAll();
+    chatAutomations.value = chatAutomationsFetched;
+    storeReferenceToAllAutomationsInsideToggleMap();
+    isFetchingChatAutomations.value = false;
+  } catch (error) {
+    LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
+  }
 }
 
 function storeReferenceToAllAutomationsInsideToggleMap(): void {
   for (const automation of chatAutomations.value) {
-    chatAutomationsToggleStateMap.value[automation.uid] = false;
+    chatAutomationsToggleStateMap.value[automation.id] = false;
   }
 }
 
@@ -79,7 +90,7 @@ function onToggleAllChatAutomations(newValue: boolean): void {
   }
 }
 
-function onCreatingNewAutomation(): void {
+async function onCreatingNewAutomation(): Promise<void> {
   isCreatingNewAutomation.value = true;
 }
 
@@ -92,8 +103,8 @@ function onDeletedChatAutomations(): void {
   chatAutomations.value = storeChatAutomationsComputed.value;
 }
 
-function onListItemToggled(data: { uid: string; value: boolean }): void {
-  chatAutomationsToggleStateMap.value[data.uid] = data.value;
+function onListItemToggled(data: { id: string; value: boolean }): void {
+  chatAutomationsToggleStateMap.value[data.id] = data.value;
 }
 
 function watchForChanges(): void {

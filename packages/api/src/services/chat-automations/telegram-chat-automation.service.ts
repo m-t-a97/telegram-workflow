@@ -10,7 +10,7 @@ import { AbstractChatAutomationService } from "./abstract-chat-automation.servic
 export class TelegramChatAutomationService extends AbstractChatAutomationService {
   private chatAutomations: ChatAutomation[] = [];
 
-  public async create(): Promise<{ uid: string }> {
+  public async create(): Promise<{ id: string }> {
     const newAutomation: ChatAutomation = {
       id: IDUtils.generate(),
       name: `automation-${IDUtils.generate(6, false)}`.toUpperCase(),
@@ -22,7 +22,7 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
 
     this.chatAutomations.push(newAutomation);
 
-    return Promise.resolve({ uid: newAutomation.id });
+    return Promise.resolve({ id: newAutomation.id });
   }
 
   public async getAll(): Promise<ChatAutomation[]> {
@@ -87,7 +87,7 @@ export class TelegramChatAutomationService extends AbstractChatAutomationService
       // );
 
       // await this.queue.add(constants.queue.chatAutomationJobKey, {
-      //   uid: userId,
+      //   id: userId,
       //   chatAutomation: data.chatAutomation,
       // });
 

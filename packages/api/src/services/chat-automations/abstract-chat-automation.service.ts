@@ -4,7 +4,7 @@ import { ChatAutomation } from "@/shared-core";
 
 @Injectable()
 export abstract class AbstractChatAutomationService {
-  public abstract create(): Promise<{ uid: string }>;
+  public abstract create(): Promise<{ id: string }>;
 
   public abstract getAll(): Promise<ChatAutomation[]>;
 

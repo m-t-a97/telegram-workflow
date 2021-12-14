@@ -8,6 +8,8 @@ import {
   Put,
 } from "@nestjs/common";
 
+import _ from "lodash";
+
 import { ChatAutomation } from "@/shared-core";
 
 import { AbstractChatAutomationService } from "src/services/chat-automations/abstract-chat-automation.service";
@@ -19,7 +21,7 @@ export class ChatAutomationsController {
   ) {}
 
   @Get("create")
-  public async create(): Promise<{ uid: string }> {
+  public async create(): Promise<{ id: string }> {
     return this.chatAutomationService.create();
   }
 
@@ -38,11 +40,23 @@ export class ChatAutomationsController {
     @Param("id") id: string,
     @Body() chatAutomation: Partial<ChatAutomation>
   ): Promise<void> {
+    const existingChatAutomation = await this.chatAutomationService.get(id);
+
+    if (_.isNil(existingChatAutomation)) {
+      return Promise.reject("A chat automation with this ID was not found.");
+    }
+
     return this.chatAutomationService.update(id, chatAutomation);
   }
 
   @Delete(":id")
   public async delete(@Param("id") id: string): Promise<void> {
+    const existingChatAutomation = await this.chatAutomationService.get(id);
+
+    if (_.isNil(existingChatAutomation)) {
+      return Promise.reject("A chat automation with this ID was not found.");
+    }
+
     return this.chatAutomationService.delete(id);
   }
 
@@ -53,6 +67,14 @@ export class ChatAutomationsController {
 
   @Post("deactivate")
   public async deactivate(@Body() data: { id: string }): Promise<any> {
+    const existingChatAutomation = await this.chatAutomationService.get(
+      data.id
+    );
+
+    if (_.isNil(existingChatAutomation)) {
+      return Promise.reject("A chat automation with this ID was not found.");
+    }
+
     return this.chatAutomationService.deactivate(data.id);
   }
 }
