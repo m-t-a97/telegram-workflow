@@ -120,6 +120,7 @@ async function onDeleteSelectedAutomations(): Promise<void> {
     }
 
     await Promise.all(chatAutomationsDeletedAsPromises);
+    await telegramChatsAutomationDaoService.getAll();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationsActionButtons",
