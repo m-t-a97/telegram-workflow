@@ -1,0 +1,57 @@
+import {
+  NavigationGuardNext,
+  RouteLocationNormalized,
+  RouteRecordNormalized,
+} from "vue-router";
+
+import _ from "lodash";
+
+import { LoggerUtils } from "@shared-core";
+
+import { RoutePaths } from "@/constants/route-paths";
+import { LocalStorageService } from "@/services/storage/local-storage.service";
+import { LocalStorageKeys } from "@/constants/local-storage-keys";
+
+const authRouteGuard = async (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+): Promise<void> => {
+  try {
+    const requiresAuth: boolean = to.matched.some(
+      (record: RouteRecordNormalized) => record.meta.requiresAuth
+    );
+
+    const authKey = await LocalStorageService.getItem<string>(
+      LocalStorageKeys.AUTH_KEY
+    );
+
+    const isUserAuthorised: boolean = !_.isEmpty(authKey);
+
+    if (requiresAuth) {
+      if (isUserAuthorised) {
+        next();
+      } else {
+        next({
+          path: `/${RoutePaths.LOGIN}`,
+        });
+      }
+    } else {
+      if (isUserAuthorised) {
+        next({
+          path: `/${RoutePaths.DASHBOARD}`,
+        });
+      } else {
+        next();
+      }
+    }
+  } catch (error) {
+    LoggerUtils.error("authRouteGuard", "", error);
+
+    next({
+      path: RoutePaths.HOME,
+    });
+  }
+};
+
+export default authRouteGuard;
