@@ -1,15 +1,15 @@
 <template>
   <div class="chat-list-item">
-    <!-- <div class="chat-list-item-image-container"></div> -->
+    <!-- <div class="chat-list-item__image-container"></div> -->
 
-    <div>
-      <span class="text-black font-semibold"
-        >{{
-          isChatChannel ? `-100${props.chat.id}` : `-${props.chat.id}`
-        }}&nbsp;
-      </span>
-      <span class="text-black">{{ (props.chat as Api.Chat).title }}</span>
-    </div>
+    <span
+      class="chat-list-item__title text-black font-semibold inline-block"
+      >{{ (props.chat as Api.Chat).title }}</span
+    >
+
+    <span class="text-black font-semibold inline-block"
+      >{{ isChatChannel ? `-100${props.chat.id}` : `-${props.chat.id}` }}&nbsp;
+    </span>
   </div>
 </template>
 
@@ -30,9 +30,13 @@ const isChatChannel = computed<boolean>(() => _.has(props.chat, "broadcast"));
 
 <style lang="scss" scoped>
 .chat-list-item {
-  @apply p-4 flex flex-row justify-start items-center rounded-md border border-solid border-black bg-white;
+  @apply p-4 flex flex-col sm:flex-row justify-center sm:justify-between items-center rounded-md border border-solid border-black bg-white;
 
-  .chat-list-item-image-container {
+  .chat-list-item__title {
+    @apply mb-4 sm:mb-0;
+  }
+
+  .chat-list-item__image-container {
     @apply mr-4 p-4 bg-black;
     border-radius: 100%;
 
