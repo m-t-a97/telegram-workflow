@@ -2,8 +2,8 @@ import { INestApplication, Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 
 import _ from "lodash";
-import configureModuleAliases from "./constants/module-alias";
 
+import configureModuleAliases from "./constants/module-alias";
 import { AppModule } from "./modules/app.module";
 
 configureModuleAliases();

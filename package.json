@@ -12,9 +12,8 @@
     "bootstrap": "lerna bootstrap",
     "build": "lerna run build",
     "start:dev": "lerna run start:dev",
+    "start:prod": "lerna run start:prod",
+    "run:prod": "yarn build && yarn start:prod",
     "test": "lerna run test:unit"
-  },
-  "devDependencies": {
-    "lerna": "4.0.0"
   }
 }
