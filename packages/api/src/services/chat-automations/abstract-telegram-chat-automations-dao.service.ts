@@ -16,4 +16,6 @@ export abstract class AbstractTelegramChatAutomationsDaoService {
   ): Promise<any>;
 
   public abstract delete(id: string): Promise<any>;
+
+  public abstract get chatAutomations(): ChatAutomation[];
 }

@@ -1,4 +1,4 @@
-import { forwardRef, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 
 import { AuthController } from "src/controllers/auth/auth.controller";
 import { TelegramAuthController } from "src/controllers/auth/telegram-auth.controller";
@@ -9,7 +9,7 @@ import { TelegramAuthService } from "src/services/auth/telegram-auth.service";
 import { ChatAutomationsModule } from "./chat-automation.module";
 
 @Module({
-  imports: [forwardRef(() => ChatAutomationsModule)],
+  imports: [ChatAutomationsModule],
   exports: [AbstractAuthService, AbstractTelegramAuthService],
   controllers: [AuthController, TelegramAuthController],
   providers: [

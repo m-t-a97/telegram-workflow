@@ -23,8 +23,6 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
   private client: TelegramClient;
 
-  private subscription: any;
-
   constructor(
     private readonly authService: AbstractAuthService,
     private readonly telegramChatAutomationsHandlerService: AbstractTelegramChatAutomationsHandlerService
@@ -56,6 +54,9 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
       );
 
       await this.client.connect();
+      this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler(
+        this.client
+      );
     } catch (error) {
       LoggerUtils.error("TelegramAuthService", "initialise", error);
     }
@@ -98,7 +99,9 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
           this.stringSession.save();
 
-          this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler();
+          this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler(
+            this.client
+          );
 
           return Promise.resolve({ isPasswordRequired: false });
         } else {
@@ -140,7 +143,9 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
       this.stringSession.save();
 
-      this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler();
+      this.telegramChatAutomationsHandlerService.subscribeToNewMessageEventHandler(
+        this.client
+      );
     } catch (error) {
       LoggerUtils.error(
         "TelegramAuthService",
@@ -174,7 +179,9 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
   public async disconnect(): Promise<void> {
     try {
-      this.telegramChatAutomationsHandlerService.unsubscribeFromNewMessageEventHandler();
+      this.telegramChatAutomationsHandlerService.unsubscribeFromNewMessageEventHandler(
+        this.client
+      );
       await this.client.disconnect();
     } catch (error) {
       LoggerUtils.error("TelegramAuthService", "disconnect", error);

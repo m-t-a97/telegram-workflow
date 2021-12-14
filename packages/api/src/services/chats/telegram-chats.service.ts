@@ -22,8 +22,6 @@ export class TelegramChatsService extends AbstractChatsService {
     // );
 
     // const chats = chatResults.chats;
-    // console.log(JSON.stringify(chats, null, 2));
-
     const chats = mockChats as any;
 
     return Promise.resolve(chats);
