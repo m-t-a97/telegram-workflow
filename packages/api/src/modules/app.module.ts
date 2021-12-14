@@ -7,6 +7,7 @@ import _ from "lodash";
 
 import { ChatAutomationsModule } from "./chat-automation.module";
 import { AuthModule } from "./auth.module";
+import { ChatsModule } from "./chats.module";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from "./auth.module";
       rootPath: path.join(__dirname, "../../../../../", "client/dist"),
     }),
     AuthModule,
+    ChatsModule,
     ChatAutomationsModule,
   ],
   controllers: [],

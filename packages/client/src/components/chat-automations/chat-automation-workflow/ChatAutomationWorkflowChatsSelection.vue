@@ -38,7 +38,6 @@ import { ChatAutomation, LoggerUtils } from "@shared-core";
 import { StoreStateType } from "@/store";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
-import { EventsService } from "@/services/events/events.service";
 
 interface Props {
   chatAutomation: ChatAutomation;
@@ -166,8 +165,6 @@ async function saveUpdatedSourceChat(chatId: number): Promise<void> {
     });
 
     await setIsTouched();
-
-    EventsService.chatAutomationsUpdater$.next();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationWorkflowChatSelection",
@@ -186,8 +183,6 @@ async function saveUpdatedDestinationChats(): Promise<void> {
     });
 
     await setIsTouched();
-
-    EventsService.chatAutomationsUpdater$.next();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationWorkflowChatSelection",

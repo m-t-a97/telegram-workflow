@@ -18,22 +18,22 @@ export class ChatAutomationsController {
     private readonly chatAutomationService: AbstractChatAutomationService
   ) {}
 
-  @Get("/create")
+  @Get("create")
   public async create(): Promise<{ uid: string }> {
     return this.chatAutomationService.create();
   }
 
-  @Get("/")
+  @Get()
   public async getAll(): Promise<ChatAutomation[]> {
     return this.chatAutomationService.getAll();
   }
 
-  @Get("/:id")
+  @Get(":id")
   public async get(@Param("id") id: string): Promise<ChatAutomation | null> {
     return this.chatAutomationService.get(id);
   }
 
-  @Put("/:id")
+  @Put(":id")
   public async update(
     @Param("id") id: string,
     @Body() chatAutomation: Partial<ChatAutomation>
@@ -41,17 +41,17 @@ export class ChatAutomationsController {
     return this.chatAutomationService.update(id, chatAutomation);
   }
 
-  @Delete("/:id")
+  @Delete(":id")
   public async delete(@Param("id") id: string): Promise<void> {
     return this.chatAutomationService.delete(id);
   }
 
-  @Post("/activate")
+  @Post("activate")
   public async activate(@Body() chatAutomation: ChatAutomation): Promise<any> {
     return this.chatAutomationService.activate(chatAutomation);
   }
 
-  @Post("/deactivate")
+  @Post("deactivate")
   public async deactivate(@Body() data: { id: string }): Promise<any> {
     return this.chatAutomationService.deactivate(data.id);
   }

@@ -52,25 +52,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onUnmounted, ref, watchEffect } from "vue";
+import { computed, inject, ref, watchEffect } from "vue";
 import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import { Store, useStore } from "vuex";
 
 import _ from "lodash";
 import { VaCard, VaCardContent, VaProgressBar, VaAlert } from "vuestic-ui";
-import { catchError, of, Subscription, tap } from "rxjs";
 
-import { LoggerUtils, RxjsHelperUtils } from "@shared-core";
+import { LoggerUtils } from "@shared-core";
 
 import { StoreStateType } from "@/store";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
-import { ITelegramChatsService } from "@/services/telegram/chats/i-telegram-chats.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
-import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 import { RoutePaths } from "@/constants/route-paths";
 import Navbar from "@/components/core/Navbar.vue";
 import Sidebar from "@/components/core/Sidebar.vue";
-import { EventsService } from "@/services/events/events.service";
 import { IHttpService } from "@/services/http/i-http.service";
 import { APIEndpoints } from "@/constants/api-endpoints";
 
@@ -78,13 +74,6 @@ const route: RouteLocationNormalizedLoaded = useRoute();
 const store: Store<StoreStateType> = useStore();
 
 const httpService: IHttpService = inject(ServiceProviderKeys.HTTP_SERVICE);
-
-const telegramChatsService: ITelegramChatsService = inject(
-  ServiceProviderKeys.TELEGRAM_CHATS_SERVICE
-);
-
-const telegramChatsAutomationDaoService: ITelegramChatsAutomationDaoService =
-  inject(ServiceProviderKeys.TELEGRAM_CHATS_AUTOMATION_SERVICE);
 
 const isLoggedIntoTelegramComputed = computed(
   () => store.state.telegramStore.isLoggedIn
@@ -100,8 +89,6 @@ const isCurrentRouteDashboardOnly = computed<boolean>(() =>
   _.isEqual(currentRoutePath.value, `/${RoutePaths.DASHBOARD}`)
 );
 
-let chatAutomationsUpdater_$: Subscription;
-
 async function initialise(): Promise<void> {
   try {
     isInitialisingTelegram.value = true;
@@ -115,11 +102,8 @@ async function initialise(): Promise<void> {
       isAuthorised
     );
 
-    // if (_.isEmpty(store.state.telegramStore.chats)) {
-    //   await fetchChats();
-    // }
-
-    // fetchChatAutomations();
+    await fetchChats();
+    await fetchChatAutomations();
     isInitialisingTelegram.value = false;
   } catch (error) {
     LoggerUtils.error("DashboardPage", "initialise", error);
@@ -128,43 +112,31 @@ async function initialise(): Promise<void> {
 
 async function fetchChats(): Promise<void> {
   try {
-    const chats = await telegramChatsService.getAllChats();
+    const chats = await httpService.get(APIEndpoints.CHATS);
     await store.dispatch(TelegramStoreActions.UPDATE_TELEGRAM_CHATS, chats);
   } catch (error) {
     LoggerUtils.error("DashboardPage", "fetchChats", error);
   }
 }
 
-function fetchChatAutomations(): void {
-  chatAutomationsUpdater_$ = EventsService.chatAutomationsUpdater$
-    .pipe(
-      tap(async () => {
-        const chatAutomations =
-          await telegramChatsAutomationDaoService.getAll();
+async function fetchChatAutomations(): Promise<void> {
+  try {
+    const chatAutomations = await httpService.get(
+      APIEndpoints.CHAT_AUTOMATIONS
+    );
 
-        await store.dispatch(
-          TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATIONS,
-          chatAutomations
-        );
-      }),
-      catchError((error: any) => {
-        LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
-
-        return of(null);
-      })
-    )
-    .subscribe();
-
-  EventsService.chatAutomationsUpdater$.next();
+    await store.dispatch(
+      TelegramStoreActions.UPDATE_TELEGRAM_CHAT_AUTOMATIONS,
+      chatAutomations
+    );
+  } catch (error) {
+    LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
+  }
 }
 
 function onToggleSidebar(): void {
   showSidebar.value = !showSidebar.value;
 }
-
-onUnmounted(() => {
-  RxjsHelperUtils.unsubscribe(chatAutomationsUpdater_$);
-});
 
 watchEffect(() => {
   currentRoutePath.value = route.path;

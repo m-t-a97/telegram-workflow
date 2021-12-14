@@ -63,7 +63,6 @@ import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { APIEndpoints } from "@/constants/api-endpoints";
 import { LocalStorageService } from "@/services/storage/local-storage.service";
 import { LocalStorageKeys } from "@/constants/local-storage-keys";
-import { EventsService } from "@/services/events/events.service";
 
 interface Props {
   chatAutomation: ChatAutomation;
@@ -105,8 +104,6 @@ function registerDebounceEffectOnChatAutomationNameInputEvent(): void {
             name: updatedName,
           }
         );
-
-        EventsService.chatAutomationsUpdater$.next();
       }),
       catchError((error) => {
         LoggerUtils.error(
@@ -140,14 +137,14 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
 
           if (updatedActive) {
             await axios.post(
-              `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATION_ACTIVATE}`,
+              `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATIONS_ACTIVATE}`,
               {
                 chatAutomation: props.chatAutomation,
               }
             );
           } else {
             await axios.post(
-              `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATION_DEACTIVATE}`,
+              `${process.env.VUE_APP_API_URL}/${APIEndpoints.CHAT_AUTOMATIONS_DEACTIVATE}`,
               { id: props.chatAutomation.id }
             );
           }
@@ -160,8 +157,6 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
               active: updatedActive,
             }
           );
-
-          EventsService.chatAutomationsUpdater$.next();
         } catch (error) {
           LoggerUtils.error(
             "ChatAutomationWorkflowToolbar",

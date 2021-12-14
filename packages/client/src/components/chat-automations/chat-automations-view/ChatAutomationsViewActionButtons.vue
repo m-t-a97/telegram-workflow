@@ -54,7 +54,6 @@ import { StoreStateType } from "@/store";
 import { ITelegramChatsAutomationDaoService } from "@/services/telegram/chats/i-telegram-chats-automation-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { RoutePaths } from "@/constants/route-paths";
-import { EventsService } from "@/services/events/events.service";
 
 interface Props {
   chatAutomationsToggleStateMap: Record<string, boolean>;
@@ -95,8 +94,6 @@ async function onCreateNewAutomation(): Promise<void> {
 
     const { uid } = await telegramChatsAutomationDaoService.create();
     newlyCreatedChatAutomationId.value = uid;
-
-    EventsService.chatAutomationsUpdater$.next();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationsActionButtons",
@@ -124,8 +121,6 @@ async function onDeleteSelectedAutomations(): Promise<void> {
     }
 
     await Promise.all(chatAutomationsDeletedAsPromises);
-
-    EventsService.chatAutomationsUpdater$.next();
   } catch (error) {
     LoggerUtils.error(
       "ChatAutomationsActionButtons",

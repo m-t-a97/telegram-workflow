@@ -10,7 +10,7 @@ export class TelegramAuthController {
     private readonly telegramAuthService: AbstractTelegramAuthService
   ) {}
 
-  @Get("/is-authorised")
+  @Get("is-authorised")
   public async isAuthorised(): Promise<boolean> {
     try {
       const isClientConnected = await this.telegramAuthService.isConnected();
@@ -24,14 +24,14 @@ export class TelegramAuthController {
     return false;
   }
 
-  @Post("/send-code")
+  @Post("send-code")
   public async sendCode(
     @Body() data: { phoneNumber: string }
   ): Promise<SentCodeResultType> {
     return this.telegramAuthService.sendCode(data.phoneNumber);
   }
 
-  @Post("/sign-in")
+  @Post("sign-in")
   public async signIn(
     @Body()
     data: {
@@ -47,7 +47,7 @@ export class TelegramAuthController {
     );
   }
 
-  @Post("/sign-in-with-two-factor")
+  @Post("sign-in-with-two-factor")
   public async signInWithTwoFactorPassword(
     @Body() data: { password: string }
   ): Promise<any> {

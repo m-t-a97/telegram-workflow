@@ -9,6 +9,7 @@ import { TelegramAuthService } from "src/services/auth/telegram-auth.service";
 
 @Module({
   imports: [],
+  exports: [AbstractAuthService, AbstractTelegramAuthService],
   controllers: [AuthController, TelegramAuthController],
   providers: [
     {
