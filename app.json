@@ -27,6 +27,6 @@
     }
   },
   "scripts": {
-    "postdeploy": "yarn bootstrap && run:prod"
+    "postdeploy": "npm run run:prod"
   }
 }

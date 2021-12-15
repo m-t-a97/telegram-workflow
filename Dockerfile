@@ -8,4 +8,4 @@ RUN npm i -g lerna
 
 COPY . ./
 
-CMD [ "yarn", "run:prod" ]
+CMD [ "npm run", "run:prod" ]
