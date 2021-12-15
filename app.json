@@ -25,8 +25,5 @@
       "value": "",
       "required": true
     }
-  },
-  "scripts": {
-    "postdeploy": "npm run run:prod"
   }
 }
