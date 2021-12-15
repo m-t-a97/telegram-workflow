@@ -13,7 +13,7 @@
     "build": "lerna run build",
     "start:dev": "lerna run start:dev",
     "start:prod": "lerna run start:prod",
-    "run:prod": "npm run bootstrap && npm run build && npm run start:prod",
+    "run:prod": "yarn bootstrap && yarn build && yarn start:prod",
     "test": "lerna run test:unit"
   }
 }
