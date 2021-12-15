@@ -1,14 +1,19 @@
-# Build stage
+# [BUILD]
 
 FROM node:16-alpine AS builder
+
 WORKDIR /app
+
 RUN npm i -g lerna
+
 COPY . ./
+
 RUN yarn bootstrap && yarn build
 
-# Run stage
+# [RUN]
 
 FROM node:16-alpine AS runner
+
 WORKDIR /app
 
 COPY --from=builder /app/packages/api/dist ./api/dist
