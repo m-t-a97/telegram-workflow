@@ -87,7 +87,7 @@ Fork the repo and create some PRs to improve the code / add more features. If yo
 
 If you've encountered any bugs, please raise issues and then fix them once you are assigned.
 
-Thank you for your contributions and have fun.
+Thank you for your contributions and have fun!
 
 ---
 
