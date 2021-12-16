@@ -56,22 +56,20 @@ $ yarn start:dev
 
 ## Production
 
-During production, the client app will be built and then served by the NestJS API via a static directory. At the moment, this is a self hosted solution so the frontend is being served by the backend.
+During production, the client app will be built and then served by the NestJS API via a static directory.
 
 Run the following commands to run it in production mode:
 
-`packages/client`:
-
-```bash
-$ yarn build
-```
-
-`packages/api`:
+Navigate to `packages/api` then execute:
 
 ```bash
 $ export NODE_ENV=production
-$ yarn build
-$ yarn start:prod
+```
+
+Now navigate back to the root of the project and run the following:
+
+```bash
+$ yarn run:prod
 ```
 
 ---
