@@ -30,13 +30,13 @@ $ yarn bootstrap
 
 Organise the order of imports in files to make it more readable and understandable at first glance what's being used.
 
-- Framework (Nestjs e.g. @nestjs/common)
+- Framework (Nestjs e.g. `@nestjs/common`)
 
-- Third party (npm libraries e.g. lodash, luxon etc)
+- Third party (npm libraries e.g. `lodash, luxon` etc)
 
-- First party (project libraries e.g. @shared-core)
+- First party (project libraries e.g. `@shared-core`)
 
-- Current project's source code (e.g. @/components/ ./some-folder or ./some-file)
+- Current project's source code (e.g. `@/components/ ./some-folder ./some-file`)
 
 The best way to work during development is to run both the frontend and backend separately. Run the following commands in the respective folders:
 
