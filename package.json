@@ -1,0 +1,19 @@
+{
+  "name": "@telegram-workflow/main",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "clean": "lerna clean -y",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "start:dev": "lerna run start:dev",
+    "start:prod": "lerna run start:prod",
+    "run:prod": "yarn bootstrap && yarn build && yarn start:prod",
+    "test": "lerna run test:unit"
+  }
+}

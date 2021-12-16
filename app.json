@@ -1,0 +1,29 @@
+{
+  "name": "Telegram Workflow",
+  "description": "A self hosted telegram automation app that allows you to create workflows to carry out automations such as forwarding messages.",
+  "repository": "https://github.com/m-t-a97/telegram-workflow",
+  "keywords": ["node", "nestjs", "vuejs", "telegram", "automation", "workflow"],
+  "stack": "container",
+  "env": {
+    "PORT": {
+      "description": "The port you want to run your server on. By default it runs on PORT 8080.",
+      "value": "8080",
+      "required": false
+    },
+    "AUTH_KEY": {
+      "description": "An auto generated unique password that gives you access to the app on your server instance.",
+      "generator": "secret",
+      "required": true
+    },
+    "API_ID": {
+      "description": "You need to provide your Telegram API_ID. Can be found at https://my.telegram.org.",
+      "value": "",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "You need to provide your Telegram API_HASH. Can be found at https://my.telegram.org.",
+      "value": "",
+      "required": true
+    }
+  }
+}
