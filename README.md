@@ -6,7 +6,7 @@ A self hosted telegram automation app that allows you to create workflows to aut
 
 ## Deployment
 
-<a href="https://heroku.com/deploy">
+<a href="https://heroku.com/deploy?template=https://github.com/m-t-a97/telegram-workflow">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
