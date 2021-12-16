@@ -58,17 +58,10 @@ $ yarn start:dev
 
 During production, the client app will be built and then served by the NestJS API via a static directory.
 
-Run the following commands to run it in production mode:
-
-Navigate to `packages/api` then execute:
+Run the following commands in the root of the project to run it in production mode:
 
 ```bash
 $ export NODE_ENV=production
-```
-
-Now navigate back to the root of the project and run the following:
-
-```bash
 $ yarn run:prod
 ```
 
