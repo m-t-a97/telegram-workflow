@@ -6,7 +6,7 @@ A self hosted telegram automation app that allows you to create workflows to aut
 
 ## Deployment
 
-<a href="https://heroku.com/deploy">
+<a href="https://heroku.com/deploy?template=https://github.com/m-t-a97/telegram-workflow">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
@@ -30,13 +30,13 @@ $ yarn bootstrap
 
 Organise the order of imports in files to make it more readable and understandable at first glance what's being used.
 
-- Framework (Nestjs e.g. @nestjs/common)
+- Framework (Nestjs e.g. `@nestjs/common`)
 
-- Third party (npm libraries e.g. lodash, luxon etc)
+- Third party (npm libraries e.g. `lodash, luxon` etc)
 
-- First party (project libraries e.g. @shared-core)
+- First party (project libraries e.g. `@shared-core`)
 
-- Current project's source code (e.g. @/components/ ./some-folder or ./some-file)
+- Current project's source code (e.g. `@/components/ ./some-folder ./some-file`)
 
 The best way to work during development is to run both the frontend and backend separately. Run the following commands in the respective folders:
 
@@ -56,22 +56,13 @@ $ yarn start:dev
 
 ## Production
 
-During production, the client app will be built and then served by the NestJS API via a static directory. At the moment, this is a self hosted solution so the frontend is being served by the backend.
+During production, the client app will be built and then served by the NestJS API via a static directory.
 
-Run the following commands to run it in production mode:
-
-`packages/client`:
-
-```bash
-$ yarn build
-```
-
-`packages/api`:
+Run the following commands in the root of the project to run it in production mode:
 
 ```bash
 $ export NODE_ENV=production
-$ yarn build
-$ yarn start:prod
+$ yarn run:prod
 ```
 
 ---

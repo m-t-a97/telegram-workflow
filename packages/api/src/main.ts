@@ -10,10 +10,7 @@ configureModuleAliases();
 
 async function bootstrap() {
   const app: INestApplication = await NestFactory.create(AppModule, {
-    cors: {
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      origin: ["http://localhost:8080", "http://localhost:3000"],
-    },
+    cors: true,
   });
 
   await app.listen(process.env.PORT || 8080);
