@@ -17,22 +17,30 @@ export class AxiosHttpService implements IHttpService {
   }
 
   public async get<T>(url: string): Promise<T> {
+    console.log(`${this.apiUrl}/${url}`);
+
     return axios.get(`${this.apiUrl}/${url}`).then((response) => response.data);
   }
 
   public async post<T>(url: string, data: T): Promise<any> {
+    console.log(`${this.apiUrl}/${url}`);
+
     return axios
       .post<T>(`${this.apiUrl}/${url}`, data)
       .then((response) => response.data);
   }
 
   public async put<T>(url: string, data: T): Promise<any> {
+    console.log(`${this.apiUrl}/${url}`);
+
     return axios
       .put<T>(`${this.apiUrl}/${url}`, data)
       .then((response) => response.data);
   }
 
   public async delete(url: string): Promise<any> {
+    console.log(`${this.apiUrl}/${url}`);
+
     return axios
       .delete(`${this.apiUrl}/${url}`)
       .then((response) => response.data);
