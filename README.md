@@ -79,6 +79,16 @@ $ yarn run:prod
 
 ---
 
+## Git & Github
+
+You should name your branches based on the number of your issue on Github e.g. `TW-1`. This would refer to an acronym of the project name `TelegramWorkflow-1`. This way everyone would know which branch your issue refers to.
+
+Don't forget to follow this guide:
+
+[Linking a pull request to an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
+
+---
+
 ## Extra notes
 
 Contributions are most welcome :)
