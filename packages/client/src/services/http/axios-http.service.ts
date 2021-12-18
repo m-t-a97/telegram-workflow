@@ -1,6 +1,9 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 
+import { LoggerUtils } from "../../../../shared-core/src/helpers";
+import { LocalStorageService } from "../storage/local-storage.service";
+import { LocalStorageKeys } from "@/constants/local-storage-keys";
 import { IHttpService } from "./i-http.service";
 
 export class AxiosHttpService implements IHttpService {
@@ -16,33 +19,57 @@ export class AxiosHttpService implements IHttpService {
     }
   }
 
-  public async get<T>(url: string): Promise<T> {
-    console.log(`${this.apiUrl}/${url}`);
-
-    return axios.get(`${this.apiUrl}/${url}`).then((response) => response.data);
-  }
-
-  public async post<T>(url: string, data: T): Promise<any> {
-    console.log(`${this.apiUrl}/${url}`);
-
+  public async get<T>(
+    url: string,
+    options?: AxiosRequestConfig<any>
+  ): Promise<T> {
     return axios
-      .post<T>(`${this.apiUrl}/${url}`, data)
+      .get(`${this.apiUrl}/${url}`, options)
       .then((response) => response.data);
   }
 
-  public async put<T>(url: string, data: T): Promise<any> {
-    console.log(`${this.apiUrl}/${url}`);
-
+  public async post<T>(
+    url: string,
+    data: T,
+    options?: AxiosRequestConfig<any>
+  ): Promise<any> {
     return axios
-      .put<T>(`${this.apiUrl}/${url}`, data)
+      .post<T>(`${this.apiUrl}/${url}`, data, options)
       .then((response) => response.data);
   }
 
-  public async delete(url: string): Promise<any> {
-    console.log(`${this.apiUrl}/${url}`);
-
+  public async put<T>(
+    url: string,
+    data: T,
+    options?: AxiosRequestConfig<any>
+  ): Promise<any> {
     return axios
-      .delete(`${this.apiUrl}/${url}`)
+      .put<T>(`${this.apiUrl}/${url}`, data, options)
       .then((response) => response.data);
   }
+
+  public async delete(
+    url: string,
+    options?: AxiosRequestConfig<any>
+  ): Promise<any> {
+    return axios
+      .delete(`${this.apiUrl}/${url}`, options)
+      .then((response) => response.data);
+  }
+
+  // public async getApiKeyFromLocalStorage(): Promise<string> {
+  //   try {
+  //     if (_.isEmpty(this.apiKey)) {
+  //       const hashedApiKey = await LocalStorageService.getItem<string>(
+  //         LocalStorageKeys.API_KEY
+  //       );
+
+  //       this.apiKey = hashedApiKey;
+  //     }
+  //   } catch (error) {
+  //     LoggerUtils.error("AxiosHttpService", "getApiKeyFromLocalStorage", error);
+  //   }
+
+  //   return this.apiKey;
+  // }
 }

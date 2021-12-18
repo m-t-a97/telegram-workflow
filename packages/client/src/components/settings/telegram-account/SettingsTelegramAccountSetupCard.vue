@@ -43,25 +43,15 @@ import { Store, useStore } from "vuex";
 import { VaCard, VaCardTitle, VaCardContent, VaButton } from "vuestic-ui";
 
 import { StoreStateType } from "@/store";
-import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import SettingsTelegramAccountSetupCardConnectModal from "@/components/settings/telegram-account/SettingsTelegramAccountSetupCardConnectModal.vue";
-import { IHttpService } from "@/services/http/i-http.service";
-import { APIEndpoints } from "@/constants/api-endpoints";
 
 const store: Store<StoreStateType> = useStore();
-
-const httpService: IHttpService = inject(ServiceProviderKeys.HTTP_SERVICE);
 
 const isConnectedToTelegram = ref<boolean>(false);
 const showTelegramAccountSetupModal = ref<boolean>(false);
 const reconnectingToTelegram = ref<boolean>(false);
 
 async function onOpenTelegramAccountSetupModal(): Promise<void> {
-  // isConnectedToTelegram.value = await httpService.get(
-  //   APIEndpoints.TELEGRAM_AUTH_IS_AUTHORISED
-  // );
-
-  // reconnectingToTelegram.value = false;
   showTelegramAccountSetupModal.value = true;
 }
 

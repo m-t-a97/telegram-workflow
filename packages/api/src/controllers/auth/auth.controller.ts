@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 
 import { AbstractAuthService } from "src/services/auth/abstract-auth.service";
 
@@ -6,11 +6,11 @@ import { AbstractAuthService } from "src/services/auth/abstract-auth.service";
 export class AuthController {
   constructor(private readonly authService: AbstractAuthService) {}
 
-  @Post("verify-api-key")
+  @Get("verify-api-key")
   public async verifyApiKey(
-    @Body() data: { apiKey: string }
+    @Query("api_key") api_key: string
   ): Promise<boolean> {
-    return this.authService.isApiKeyVerified(data.apiKey);
+    return this.authService.isApiKeyVerified(api_key);
   }
 
   @Get("fetch-api-credentials")
