@@ -15,7 +15,7 @@
       "value": "",
       "required": true
     },
-    "AUTH_KEY": {
+    "API_KEY": {
       "description": "An auto generated unique password that gives you access to the app on your server instance.",
       "generator": "secret",
       "required": false

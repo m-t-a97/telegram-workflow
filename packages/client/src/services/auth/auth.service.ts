@@ -12,25 +12,25 @@ import { APIEndpoints } from "@/constants/api-endpoints";
 export class AuthService implements IAuthService {
   constructor(private readonly httpService: IHttpService) {}
 
-  public async signIn(authKey: string): Promise<boolean> {
+  public async signIn(apiKey: string): Promise<boolean> {
     try {
-      const hashedAuthKey: string = createHmac("sha256", authKey).digest("hex");
+      const hashedApiKey: string = createHmac("sha256", apiKey).digest("hex");
 
-      const isAuthKeyVerified = await this.httpService.post<{
-        authKey: string;
-      }>(APIEndpoints.AUTH_VERIFY_AUTH_KEY, {
-        authKey: hashedAuthKey,
+      const isApiKeyVerified = await this.httpService.post<{
+        apiKey: string;
+      }>(APIEndpoints.AUTH_VERIFY_API_KEY, {
+        apiKey: hashedApiKey,
       });
 
-      if (isAuthKeyVerified) {
+      if (isApiKeyVerified) {
         await LocalStorageService.setItem(
-          LocalStorageKeys.AUTH_KEY,
-          hashedAuthKey
+          LocalStorageKeys.API_KEY,
+          hashedApiKey
         );
 
         return Promise.resolve(true);
       } else {
-        return Promise.reject({ message: "Auth key is invalid" });
+        return Promise.reject({ message: "API key is invalid" });
       }
     } catch (error) {
       LoggerUtils.error("AuthService", "signIn", error);

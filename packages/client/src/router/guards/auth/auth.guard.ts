@@ -22,11 +22,11 @@ const authRouteGuard = async (
       (record: RouteRecordNormalized) => record.meta.requiresAuth
     );
 
-    const authKey = await LocalStorageService.getItem<string>(
-      LocalStorageKeys.AUTH_KEY
+    const apiKey = await LocalStorageService.getItem<string>(
+      LocalStorageKeys.API_KEY
     );
 
-    const isUserAuthorised: boolean = !_.isEmpty(authKey);
+    const isUserAuthorised: boolean = !_.isEmpty(apiKey);
 
     if (requiresAuth) {
       if (isUserAuthorised) {

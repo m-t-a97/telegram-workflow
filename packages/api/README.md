@@ -20,8 +20,8 @@ Create a `.env.local` file and add the following variables to it. This file is u
 # The port to run the server on
 PORT=<value>
 
-# User generated unique auth key
-AUTH_KEY=<value>
+# User generated unique API key
+API_KEY=<value>
 
 # Telegram API ID
 API_ID=<value>

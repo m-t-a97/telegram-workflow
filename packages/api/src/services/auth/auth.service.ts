@@ -15,16 +15,16 @@ export class AuthService extends AbstractAuthService {
     super();
   }
 
-  public async isAuthKeyVerified(authKey: string): Promise<boolean> {
+  public async isApiKeyVerified(apiKey: string): Promise<boolean> {
     try {
-      const hashedAuthKey: string = createHmac(
+      const hashedApiKey: string = createHmac(
         "sha256",
-        this.configService.get<string>("AUTH_KEY")
+        this.configService.get<string>("API_KEY")
       ).digest("hex");
 
-      return Promise.resolve(_.isEqual(authKey, hashedAuthKey));
+      return Promise.resolve(_.isEqual(apiKey, hashedApiKey));
     } catch (error) {
-      Logger.error(error.message, "AuthService:isAuthKeyVerified");
+      Logger.error(error.message, "AuthService:isApiKeyVerified");
     }
   }
 
