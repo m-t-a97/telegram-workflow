@@ -1,3 +1,3 @@
 export interface IAuthService {
-  signIn(authKey: string): Promise<any>;
+  signIn(apiKey: string): Promise<any>;
 }

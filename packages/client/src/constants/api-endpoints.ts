@@ -1,5 +1,5 @@
 export enum APIEndpoints {
-  AUTH_VERIFY_AUTH_KEY = "api/auth/verify-auth-key",
+  AUTH_VERIFY_API_KEY = "api/auth/verify-api-key",
   AUTH_FETCH_API_CREDENTIALS = "api/auth/fetch-api-credentials",
 
   TELEGRAM_AUTH_IS_AUTHORISED = "api/telegram-auth/is-authorised",

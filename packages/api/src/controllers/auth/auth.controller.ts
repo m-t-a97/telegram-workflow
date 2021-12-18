@@ -6,11 +6,11 @@ import { AbstractAuthService } from "src/services/auth/abstract-auth.service";
 export class AuthController {
   constructor(private readonly authService: AbstractAuthService) {}
 
-  @Post("verify-auth-key")
-  public async verifyAuthKey(
-    @Body() data: { authKey: string }
+  @Post("verify-api-key")
+  public async verifyApiKey(
+    @Body() data: { apiKey: string }
   ): Promise<boolean> {
-    return this.authService.isAuthKeyVerified(data.authKey);
+    return this.authService.isApiKeyVerified(data.apiKey);
   }
 
   @Get("fetch-api-credentials")

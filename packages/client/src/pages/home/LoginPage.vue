@@ -3,13 +3,13 @@
     <va-card class="card-form-wrapper">
       <va-card-content>
         <va-form class="card-form">
-          <h1 class="card-form-title">ENTER YOUR SECRET KEY</h1>
+          <h1 class="card-form-title">ENTER YOUR API KEY</h1>
 
           <va-input
-            label="Auth Key"
+            label="API Key"
             type="password"
             :rules="[inputValidation]"
-            v-model="authKey"
+            v-model="apiKey"
           />
 
           <p class="error-message" v-show="errorMessage !== ''">
@@ -46,10 +46,10 @@ const router: Router = useRouter();
 
 const authService: IAuthService = inject(ServiceProviderKeys.AUTH_SERVICE);
 
-const authKey = ref<string>("");
+const apiKey = ref<string>("");
 const errorMessage = ref<string>("");
 
-const areAllFieldsValid = computed<boolean>(() => !_.isEmpty(authKey.value));
+const areAllFieldsValid = computed<boolean>(() => !_.isEmpty(apiKey.value));
 
 const isAttemptingSignIn = ref<boolean>(false);
 
@@ -62,7 +62,7 @@ async function onSignIn(): Promise<void> {
       errorMessage.value = "";
       isAttemptingSignIn.value = true;
 
-      await authService.signIn(authKey.value.trim());
+      await authService.signIn(apiKey.value.trim());
       await router.replace(RoutePaths.DASHBOARD);
     } else {
       errorMessage.value = "All fields must be filled in.";
