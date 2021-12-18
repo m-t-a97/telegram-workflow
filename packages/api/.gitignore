@@ -34,7 +34,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # Custom
-.env.local*
+.env.*local
 *.cert.json
 
 # env file for Prisma
