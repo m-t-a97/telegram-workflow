@@ -1,6 +1,6 @@
-import { ChatAutomation, LoggerUtils } from "@shared-core";
+import { ChatAutomation, HttpConstants, LoggerUtils } from "@shared-core";
 
-import store from "@/store";
+import store, { StoreStateType } from "@/store";
 import { APIEndpoints } from "@/constants/api-endpoints";
 import { IHttpService } from "@/services/http/i-http.service";
 import {
@@ -17,7 +17,13 @@ export class ApiTelegramChatAutomationsDaoService
   public async create(): Promise<ChatAutomationCreatedResultType> {
     try {
       const { id } = await this.httpService.get<{ id: string }>(
-        APIEndpoints.CHAT_AUTOMATIONS_CREATE
+        APIEndpoints.CHAT_AUTOMATIONS_CREATE,
+        {
+          headers: {
+            [HttpConstants.API_KEY_HEADER]: (store.state as StoreStateType)
+              .authStore.apiKey,
+          },
+        }
       );
 
       await this.getAll();
@@ -38,7 +44,13 @@ export class ApiTelegramChatAutomationsDaoService
 
   public async getAll(): Promise<ChatAutomation[]> {
     const chatAutomations = await this.httpService.get<ChatAutomation[]>(
-      APIEndpoints.CHAT_AUTOMATIONS
+      APIEndpoints.CHAT_AUTOMATIONS,
+      {
+        headers: {
+          [HttpConstants.API_KEY_HEADER]: (store.state as StoreStateType)
+            .authStore.apiKey,
+        },
+      }
     );
 
     await store.dispatch(
@@ -50,7 +62,12 @@ export class ApiTelegramChatAutomationsDaoService
   }
 
   public async getOne(id: string): Promise<ChatAutomation> {
-    return this.httpService.get(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`);
+    return this.httpService.get(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`, {
+      headers: {
+        [HttpConstants.API_KEY_HEADER]: (store.state as StoreStateType)
+          .authStore.apiKey,
+      },
+    });
   }
 
   public async update(
@@ -59,11 +76,22 @@ export class ApiTelegramChatAutomationsDaoService
   ): Promise<void> {
     return this.httpService.put(
       `${APIEndpoints.CHAT_AUTOMATIONS}/${id}`,
-      chatAutomation
+      chatAutomation,
+      {
+        headers: {
+          [HttpConstants.API_KEY_HEADER]: (store.state as StoreStateType)
+            .authStore.apiKey,
+        },
+      }
     );
   }
 
   public async delete(id: string): Promise<void> {
-    return this.httpService.delete(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`);
+    return this.httpService.delete(`${APIEndpoints.CHAT_AUTOMATIONS}/${id}`, {
+      headers: {
+        [HttpConstants.API_KEY_HEADER]: (store.state as StoreStateType)
+          .authStore.apiKey,
+      },
+    });
   }
 }

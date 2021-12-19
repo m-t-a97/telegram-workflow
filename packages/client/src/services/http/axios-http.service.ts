@@ -1,9 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import _ from "lodash";
 
-import { LoggerUtils } from "../../../../shared-core/src/helpers";
-import { LocalStorageService } from "../storage/local-storage.service";
-import { LocalStorageKeys } from "@/constants/local-storage-keys";
 import { IHttpService } from "./i-http.service";
 
 export class AxiosHttpService implements IHttpService {
@@ -56,20 +53,4 @@ export class AxiosHttpService implements IHttpService {
       .delete(`${this.apiUrl}/${url}`, options)
       .then((response) => response.data);
   }
-
-  // public async getApiKeyFromLocalStorage(): Promise<string> {
-  //   try {
-  //     if (_.isEmpty(this.apiKey)) {
-  //       const hashedApiKey = await LocalStorageService.getItem<string>(
-  //         LocalStorageKeys.API_KEY
-  //       );
-
-  //       this.apiKey = hashedApiKey;
-  //     }
-  //   } catch (error) {
-  //     LoggerUtils.error("AxiosHttpService", "getApiKeyFromLocalStorage", error);
-  //   }
-
-  //   return this.apiKey;
-  // }
 }

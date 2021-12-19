@@ -16,13 +16,14 @@ export class AuthService implements IAuthService {
     try {
       const hashedApiKey: string = createHmac("sha256", apiKey).digest("hex");
 
-      const isApiKeyVerified = await this.httpService.get<{
-        apiKey: string;
-      }>(`${APIEndpoints.AUTH_VERIFY_API_KEY}?api_key=${apiKey}`, {
-        headers: {
-          [HttpConstants.API_KEY_HEADER]: apiKey,
-        },
-      });
+      const isApiKeyVerified = await this.httpService.get<boolean>(
+        `${APIEndpoints.AUTH_VERIFY_API_KEY}?api_key=${hashedApiKey}`,
+        {
+          headers: {
+            [HttpConstants.API_KEY_HEADER]: hashedApiKey,
+          },
+        }
+      );
 
       if (isApiKeyVerified) {
         await LocalStorageService.setItem(
