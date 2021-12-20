@@ -31,20 +31,7 @@ export class TelegramChatAutomationsDaoService extends AbstractTelegramChatAutom
   }
 
   public async getAll(): Promise<ChatAutomation[]> {
-    return (await this.dbService.prismaClient.chatAutomation.findMany()).map(
-      (chatAutomation) => {
-        return {
-          ...chatAutomation,
-          sourceChatId: chatAutomation.sourceChatId?.toString(),
-          destinationChatIds:
-            chatAutomation.destinationChatIds.length > 0
-              ? chatAutomation.destinationChatIds.map((destinationChatId) =>
-                  destinationChatId.toString()
-                )
-              : [],
-        } as ChatAutomation;
-      }
-    );
+    return this.dbService.prismaClient.chatAutomation.findMany();
   }
 
   public async get(id: string): Promise<ChatAutomation | null> {
@@ -56,16 +43,7 @@ export class TelegramChatAutomationsDaoService extends AbstractTelegramChatAutom
           },
         });
 
-      return Promise.resolve({
-        ...chatAutomation,
-        sourceChatId: chatAutomation.sourceChatId?.toString(),
-        destinationChatIds:
-          chatAutomation.destinationChatIds.length > 0
-            ? chatAutomation.destinationChatIds.map((destinationChatId) =>
-                destinationChatId.toString()
-              )
-            : [],
-      });
+      return Promise.resolve(chatAutomation);
     } catch (error) {
       Logger.error(error.message, "TelegramChatAutomationsDaoService:get");
 

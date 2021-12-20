@@ -37,8 +37,7 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
       this.apiId = parseInt(apiId);
       this.apiHash = apiHash;
-
-      this.stringSession = new StringSession("");
+      this.stringSession = new StringSession();
 
       this.client = new TelegramClient(
         this.stringSession,
