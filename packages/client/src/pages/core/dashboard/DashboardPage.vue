@@ -67,13 +67,18 @@ import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { RoutePaths } from "@/constants/route-paths";
 import Navbar from "@/components/core/Navbar.vue";
 import Sidebar from "@/components/core/Sidebar.vue";
-import { IHttpService } from "@/services/http/i-http.service";
-import { APIEndpoints } from "@/constants/api-endpoints";
+import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
+import { ITelegramChatsService } from "@/services/telegram/chats/i-telegram-chats.service";
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store: Store<StoreStateType> = useStore();
 
-const httpService: IHttpService = inject(ServiceProviderKeys.HTTP_SERVICE);
+const telegramAuthService: ITelegramAuthService = inject(
+  ServiceProviderKeys.TELEGRAM_AUTH_SERVICE
+);
+const telegramChatsService: ITelegramChatsService = inject(
+  ServiceProviderKeys.TELEGRAM_CHATS_SERVICE
+);
 
 const isLoggedIntoTelegramComputed = computed(
   () => store.state.telegramStore.isLoggedIn
@@ -93,9 +98,7 @@ async function initialise(): Promise<void> {
   try {
     isInitialisingTelegram.value = true;
 
-    const isAuthorised = await httpService.get(
-      APIEndpoints.TELEGRAM_AUTH_IS_AUTHORISED
-    );
+    const isAuthorised = await telegramAuthService.isAuthorised();
 
     await store.dispatch(
       TelegramStoreActions.UPDATE_IS_LOGGED_INTO_TELEGRAM,
@@ -111,7 +114,7 @@ async function initialise(): Promise<void> {
 
 async function fetchChats(): Promise<void> {
   try {
-    const chats = await httpService.get(APIEndpoints.CHATS);
+    const chats = await telegramChatsService.getAll();
     await store.dispatch(TelegramStoreActions.UPDATE_TELEGRAM_CHATS, chats);
   } catch (error) {
     LoggerUtils.error("DashboardPage", "fetchChats", error);

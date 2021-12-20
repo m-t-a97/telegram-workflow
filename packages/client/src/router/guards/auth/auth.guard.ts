@@ -8,6 +8,8 @@ import _ from "lodash";
 
 import { LoggerUtils } from "@shared-core";
 
+import store, { StoreStateType } from "@/store";
+import { AuthStoreActions } from "@/store/modules/auth.store";
 import { RoutePaths } from "@/constants/route-paths";
 import { LocalStorageService } from "@/services/storage/local-storage.service";
 import { LocalStorageKeys } from "@/constants/local-storage-keys";
@@ -25,6 +27,10 @@ const authRouteGuard = async (
     const apiKey = await LocalStorageService.getItem<string>(
       LocalStorageKeys.API_KEY
     );
+
+    if (!_.isNil(apiKey)) {
+      await store.dispatch(AuthStoreActions.SET_API_KEY, apiKey);
+    }
 
     const isUserAuthorised: boolean = !_.isEmpty(apiKey);
 

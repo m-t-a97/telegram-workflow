@@ -1,36 +1,21 @@
 import { Api } from "telegram";
 
-import { LoggerUtils } from "@shared-core";
+import { HttpConstants } from "@shared-core";
 
-import { TelegramAuthService } from "../auth/telegram-auth.service";
+import store, { StoreStateType } from "@/store";
 import { ITelegramChatsService } from "./i-telegram-chats.service";
-
-import testChatsAsJson from "./test-chats.json";
+import { IHttpService } from "@/services/http/i-http.service";
+import { APIEndpoints } from "@/constants/api-endpoints";
 
 export class TelegramChatsService implements ITelegramChatsService {
-  constructor(private readonly telegramAuthService: TelegramAuthService) {}
+  constructor(private readonly httpService: IHttpService) {}
 
-  public async getAllChats(): Promise<Api.TypeChat[]> {
-    try {
-      // const client = this.telegramAuthService.getClient();
-
-      // const chatResults: Api.messages.TypeChats = await client.invoke(
-      //   new Api.messages.GetAllChats({ exceptIds: [] })
-      // );
-
-      // const chats = chatResults.chats;
-      // return Promise.resolve(chats);
-
-      return this.useTestChats();
-    } catch (error) {
-      LoggerUtils.error("TelegramChatsService", "getAllChats", error);
-
-      return Promise.reject(error.message);
-    }
-  }
-
-  // TODO: using for testing purposes
-  private useTestChats(): Promise<any> {
-    return Promise.resolve(testChatsAsJson);
+  public async getAll(): Promise<Api.TypeChat[]> {
+    return this.httpService.get(APIEndpoints.CHATS, {
+      headers: {
+        [HttpConstants.API_KEY_HEADER]: (store.state as StoreStateType)
+          .authStore.apiKey,
+      },
+    });
   }
 }

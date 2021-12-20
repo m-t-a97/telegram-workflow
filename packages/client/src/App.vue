@@ -31,7 +31,7 @@ const telegramAuthService: ITelegramAuthService = new TelegramAuthService(
 );
 
 const telegramChatsService: ITelegramChatsService = new TelegramChatsService(
-  telegramAuthService as TelegramAuthService
+  httpService
 );
 
 const telegramChatsAutomationDaoService: ITelegramChatAutomationsDaoService =

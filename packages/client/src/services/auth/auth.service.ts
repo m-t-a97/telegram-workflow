@@ -1,13 +1,13 @@
 import _ from "lodash";
 import { createHmac } from "crypto";
 
-import { LoggerUtils } from "@shared-core";
+import { LoggerUtils, HttpConstants } from "@shared-core";
 
+import { LocalStorageKeys } from "@/constants/local-storage-keys";
+import { APIEndpoints } from "@/constants/api-endpoints";
 import { LocalStorageService } from "../storage/local-storage.service";
 import { IAuthService } from "./i-auth.service";
-import { LocalStorageKeys } from "@/constants/local-storage-keys";
 import { IHttpService } from "../http/i-http.service";
-import { APIEndpoints } from "@/constants/api-endpoints";
 
 export class AuthService implements IAuthService {
   constructor(private readonly httpService: IHttpService) {}
@@ -16,11 +16,14 @@ export class AuthService implements IAuthService {
     try {
       const hashedApiKey: string = createHmac("sha256", apiKey).digest("hex");
 
-      const isApiKeyVerified = await this.httpService.post<{
-        apiKey: string;
-      }>(APIEndpoints.AUTH_VERIFY_API_KEY, {
-        apiKey: hashedApiKey,
-      });
+      const isApiKeyVerified = await this.httpService.get<boolean>(
+        `${APIEndpoints.AUTH_VERIFY_API_KEY}?api_key=${hashedApiKey}`,
+        {
+          headers: {
+            [HttpConstants.API_KEY_HEADER]: hashedApiKey,
+          },
+        }
+      );
 
       if (isApiKeyVerified) {
         await LocalStorageService.setItem(
@@ -30,7 +33,7 @@ export class AuthService implements IAuthService {
 
         return Promise.resolve(true);
       } else {
-        return Promise.reject({ message: "API key is invalid" });
+        return Promise.reject({ message: "API_KEY is invalid" });
       }
     } catch (error) {
       LoggerUtils.error("AuthService", "signIn", error);

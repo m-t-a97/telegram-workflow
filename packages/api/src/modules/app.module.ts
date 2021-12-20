@@ -15,9 +15,7 @@ import { ChatsModule } from "./chats.module";
       isGlobal: true,
       expandVariables: true,
       cache: true,
-      envFilePath: !_.isEqual(process.env.NODE_ENV, "production")
-        ? [".env.local", ".env.development"]
-        : [],
+      envFilePath: ".env.local",
     }),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, "../../../../../", "client/dist"),
