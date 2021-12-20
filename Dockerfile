@@ -27,6 +27,7 @@ RUN yarn add tslib@2.3.1
 
 ENV NODE_ENV production
 ENV PORT $PORT
+
 EXPOSE $PORT
 
 CMD [ "yarn", "start:prod" ]

@@ -5,9 +5,10 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import path from "path";
 import _ from "lodash";
 
-import { ChatAutomationsModule } from "./chat-automation.module";
+import { DbModule } from "./db.module";
 import { AuthModule } from "./auth.module";
 import { ChatsModule } from "./chats.module";
+import { ChatAutomationsModule } from "./chat-automation.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ChatsModule } from "./chats.module";
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, "../../../../../", "client/dist"),
     }),
+    DbModule,
     AuthModule,
     ChatsModule,
     ChatAutomationsModule,

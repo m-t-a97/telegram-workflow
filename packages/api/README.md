@@ -7,7 +7,7 @@
 ## Installation
 
 ```bash
-yarn install
+$ yarn install
 ```
 
 ---
@@ -44,13 +44,13 @@ PORT=<value>
 
 ```bash
 # development
-yarn start
+$ yarn start
 
 # watch mode
-yarn start:dev
+$ yarn start:dev
 
 # production mode
-yarn start:prod
+$ yarn start:prod
 ```
 
 ---
@@ -59,13 +59,25 @@ yarn start:prod
 
 ```bash
 # unit tests
-yarn test
+$ yarn test
 
 # e2e tests
-yarn test:e2e
+$ yarn test:e2e
 
 # test coverage
-yarn test:cov
+$ yarn test:cov
+```
+
+---
+
+# Prisma
+
+```bash
+# Re-run the prisma generate command after every change that's made to your Prisma schema to update the generated Prisma Client code
+$ npx prisma generate
+
+# Run the initial migration to map the data models to the database schema and generate the migration files.
+$ npx prisma migrate dev --name init
 ```
 
 ---

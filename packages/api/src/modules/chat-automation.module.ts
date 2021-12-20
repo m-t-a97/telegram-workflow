@@ -1,5 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common";
 
+import { DbModule } from "./db.module";
 import { TelegramChatAutomationsController } from "src/controllers/chat-automations/telegram-chat-automations.controller";
 import { ApiKeyVerificationMiddleware } from "src/middleware/api-key-verification.middleware";
 import { AbstractTelegramChatAutomationsDaoService } from "src/services/chat-automations/abstract-telegram-chat-automations-dao.service";
@@ -8,6 +9,7 @@ import { TelegramChatAutomationsDaoService } from "src/services/chat-automations
 import { TelegramChatAutomationsHandlerService } from "src/services/chat-automations/telegram-chat-automations-handler.service";
 
 @Module({
+  imports: [DbModule],
   exports: [
     AbstractTelegramChatAutomationsDaoService,
     AbstractTelegramChatAutomationsHandlerService,
