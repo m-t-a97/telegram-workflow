@@ -74,7 +74,7 @@ async function fetchChatAutomations(): Promise<void> {
     storeReferenceToAllAutomationsInsideToggleMap();
     isFetchingChatAutomations.value = false;
   } catch (error) {
-    LoggerUtils.error("DashboardPage", "fetchChatAutomations", error);
+    LoggerUtils.error("ChatAutomationsPage", "fetchChatAutomations", error);
   }
 }
 

@@ -49,7 +49,7 @@ const emit = defineEmits(["is-automation-valid"]);
 
 type ChatSelectionType = {
   value: number;
-  chatId: number;
+  chatId: string;
   chatName: string;
   isCreator: boolean;
   isChannel: boolean;
@@ -89,9 +89,7 @@ function mapAllChatsToChatSelections(): void {
     type GroupOrChannel = Api.Chat | Api.Channel;
 
     const isChannel = _.has(chat, "broadcast");
-    const chatId = isChannel
-      ? parseInt(`-100${chat.id}`)
-      : parseInt(`-${chat.id}`);
+    const chatId = isChannel ? `-100${chat.id}` : `-${chat.id}`;
 
     return {
       value: index,
@@ -158,10 +156,10 @@ function initialiseSelectedChatDestinations(): void {
   }
 }
 
-async function saveUpdatedSourceChat(chatId: number): Promise<void> {
+async function saveUpdatedSourceChat(chatId: string): Promise<void> {
   try {
     await telegramChatsAutomationDaoService.update(props.chatAutomation.id, {
-      sourceChatId: chatId,
+      sourceChatId: chatId.toString() as any,
     });
 
     await setIsTouched();

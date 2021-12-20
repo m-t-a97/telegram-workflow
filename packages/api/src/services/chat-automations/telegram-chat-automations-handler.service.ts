@@ -19,7 +19,8 @@ export class TelegramChatAutomationsHandlerService extends AbstractTelegramChatA
   public subscribeToNewMessageEventHandler(client: TelegramClient): void {
     try {
       client.addEventHandler(
-        (event: NewMessageEvent) => this.messageEventCallback(event, client),
+        async (event: NewMessageEvent) =>
+          await this.messageEventCallback(event, client),
         new NewMessage({})
       );
     } catch (error) {
@@ -32,34 +33,41 @@ export class TelegramChatAutomationsHandlerService extends AbstractTelegramChatA
 
   public unsubscribeFromNewMessageEventHandler(client: TelegramClient): void {
     client.removeEventHandler(
-      (event: NewMessageEvent) => this.messageEventCallback(event, client),
+      async (event: NewMessageEvent) =>
+        await this.messageEventCallback(event, client),
       new NewMessage({})
     );
   }
 
-  private messageEventCallback(
+  private async messageEventCallback(
     event: NewMessageEvent,
     client: TelegramClient
-  ): void {
-    const chatAutomations: ChatAutomation[] =
-      this.telegramChatAutomationsDaoService.chatAutomations;
+  ): Promise<void> {
+    try {
+      const chatAutomations: ChatAutomation[] =
+        await this.telegramChatAutomationsDaoService.getAll();
 
-    const chatId: string = this.getChatID(event);
+      const chatId: string = this.getChatID(event);
 
-    for (let i = 0; i < chatAutomations.length; i++) {
-      const chatAutomation: ChatAutomation = chatAutomations[i];
+      for (let i = 0; i < chatAutomations.length; i++) {
+        const chatAutomation: ChatAutomation = chatAutomations[i];
 
-      if (!chatAutomation.active) {
-        continue;
+        if (!chatAutomation.active) {
+          continue;
+        }
+
+        if (_.isEqual(chatAutomation.sourceChatId, chatId)) {
+          chatAutomation.destinationChatIds.forEach((destChatId: string) => {
+            client.sendMessage(destChatId, {
+              message: event.message.message,
+            });
+          });
+
+          break;
+        }
       }
-
-      if (_.isEqual(chatAutomation.sourceChatId, parseInt(chatId))) {
-        chatAutomation.destinationChatIds.forEach((destChatId: number) => {
-          client.sendMessage(destChatId, { message: event.message.message });
-        });
-
-        break;
-      }
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
 
