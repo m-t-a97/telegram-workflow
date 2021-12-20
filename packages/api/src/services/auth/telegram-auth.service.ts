@@ -38,10 +38,7 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
       this.apiId = parseInt(apiId);
       this.apiHash = apiHash;
 
-      this.stringSession = new StringSession(
-        "1BAAOMTQ5LjE1NC4xNjcuOTEAUJmrzlophtNqKfT8dQ1wkxYJ1ZGpIi6wexxKAeH/hfiQte8YA/1KJTUrUm/qN+DsqCoRL9HpQ0ErOyKz94FPkjkmTo6+zuL5PYznWOtxDhagY760MxCLc+0W9q8tvjuVlGek5hd5IIyvu8s6TF/RTmoO0kKBLcyYxNpl0d5/qIIBC23XkpAC+bElO9Gl7PohqWccGqZ/dnz0XQ2/Zci5g8ToQgkaEktfytEke2PwL4ijt8V4ZKK3ENxd16P8dddbJPM1Y3kCDVuR5KmN7C+QCQxbeLr8UQnl9CFTO+XkBPa3fPt1XjcnGCtKdhATXW5UMQisMSlmYGxzLRHy4Jg+fwk="
-      );
-      this.stringSession.load();
+      this.stringSession = new StringSession("");
 
       this.client = new TelegramClient(
         this.stringSession,
