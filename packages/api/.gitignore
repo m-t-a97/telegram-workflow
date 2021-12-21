@@ -36,6 +36,3 @@ lerna-debug.log*
 # Custom
 .env.*local
 *.cert.json
-
-# env file for Prisma
-.env

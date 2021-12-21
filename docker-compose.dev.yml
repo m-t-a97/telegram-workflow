@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  database:
+    container_name: telegram-workflow-database
+    image: postgres:14
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=my_secret_password
+      - POSTGRES_DB=telegramworkflowdb
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  webserver:
+    container_name: telegram-workflow-webserver
+    restart: always
+    build:
+      context: ./Dockerfile.development
+    ports:
+      - 8080:8080
+      - 3000:3000
+    depends-on:
+      - database
+    volumes:
+      - .:~/workspace/
