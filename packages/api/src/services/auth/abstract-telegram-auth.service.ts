@@ -1,7 +1,10 @@
+import { Injectable } from "@nestjs/common";
+
 import { TelegramClient } from "telegram";
 
 import { SentCodeResultType, SignInResultType } from "@/shared-core";
 
+@Injectable()
 export abstract class AbstractTelegramAuthService {
   public abstract sendCode(phoneNumber: string): Promise<SentCodeResultType>;
 

@@ -30,14 +30,6 @@ API_ID=<value>
 API_HASH=<value>
 ```
 
-Create a `.env.development` file and add the following variables to it. This file is used to store non-secret variables.
-
-```bash
-# if on WSL2 and using docker, make the IP address "host.docker.internal".
-HOST=<value>
-PORT=<value>
-```
-
 ---
 
 ## Running the app

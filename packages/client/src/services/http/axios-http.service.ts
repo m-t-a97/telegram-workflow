@@ -8,12 +8,12 @@ export class AxiosHttpService implements IHttpService {
 
   constructor() {
     if (_.isEqual(process.env.NODE_ENV, "production")) {
-      this.apiUrl = !_.isNil(process.env.VUE_APP_HEROKU_APP_NAME)
-        ? `https://${process.env.VUE_APP_HEROKU_APP_NAME}.herokuapp.com`
-        : process.env.VUE_APP_API_URL;
+      this.apiUrl = window.location.origin;
     } else {
       this.apiUrl = process.env.VUE_APP_API_URL;
     }
+
+    console.log("API URL:", this.apiUrl);
   }
 
   public async get<T>(
