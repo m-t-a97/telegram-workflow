@@ -9,8 +9,7 @@
     "test:e2e": "vue-cli-service test:e2e",
     "build:watch": "npx vue-cli-service build --watch",
     "cy:run": "cypress run",
-    "cy:open": "cypress open",
-    "inspect": "vue-cli-service inspect > output.js"
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "axios": "0.24.0",
