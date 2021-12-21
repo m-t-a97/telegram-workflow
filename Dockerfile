@@ -25,6 +25,7 @@ WORKDIR /app/api
 
 RUN yarn add tslib@2.3.1
 
+ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_ENV production
 ENV PORT $PORT
 
