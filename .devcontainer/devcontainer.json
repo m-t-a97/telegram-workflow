@@ -26,7 +26,8 @@
     "esbenp.prettier-vscode",
     "mike-co.import-sorter",
     "pflannery.vscode-versionlens",
-    "johnsoncodehk.volar"
+    "johnsoncodehk.volar",
+    "prisma.prisma"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
