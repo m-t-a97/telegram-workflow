@@ -14,6 +14,8 @@ RUN yarn bootstrap && yarn build
 
 FROM node:16-alpine AS runner
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /app
 
 COPY --from=builder /app/packages/api/dist ./api/dist
@@ -25,7 +27,6 @@ WORKDIR /app/api
 
 RUN yarn add tslib@2.3.1
 
-ENV DEBIAN_FRONTEND=noninteractive
 ENV NODE_ENV production
 ENV PORT $PORT
 
