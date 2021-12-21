@@ -2,7 +2,6 @@ FROM node:16
 
 WORKDIR /app
 
-RUN npm i -g yarn
 RUN npm i -g lerna
 
 COPY . ./
