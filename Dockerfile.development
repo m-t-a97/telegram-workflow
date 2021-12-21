@@ -3,6 +3,8 @@ FROM node:16
 WORKDIR /app
 
 RUN npm i -g lerna
+RUN npm i -g yarn
+RUN npm i -g @nestjs/cli
 
 COPY . ./
 RUN yarn bootstrap
