@@ -24,11 +24,6 @@
       "description": "The port you want to run your server on. By default it runs on PORT 8080.",
       "value": "8080",
       "required": false
-    },
-    "VUE_APP_HEROKU_APP_NAME": {
-      "description": "Enter the name of your heroku app. (NOTE: this must be the same name as the 'App name' field above)",
-      "value": "",
-      "required": true
     }
   }
 }
