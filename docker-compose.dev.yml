@@ -24,3 +24,5 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=my_secret_password
       - POSTGRES_DB=telegramworkflowdb
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
