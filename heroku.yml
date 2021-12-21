@@ -6,6 +6,5 @@ build:
   docker:
     web: Dockerfile
 release:
-  image: node:16-alpine
   command:
     - npx prisma migrate deploy
