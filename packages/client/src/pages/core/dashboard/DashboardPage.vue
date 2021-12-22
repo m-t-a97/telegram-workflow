@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, watchEffect } from "vue";
+import { computed, inject, onMounted, ref, watchEffect } from "vue";
 import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import { Store, useStore } from "vuex";
 
@@ -68,16 +68,12 @@ import { RoutePaths } from "@/constants/route-paths";
 import Navbar from "@/components/core/Navbar.vue";
 import Sidebar from "@/components/core/Sidebar.vue";
 import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
-import { ITelegramChatsService } from "@/services/telegram/chats/i-telegram-chats.service";
 
 const route: RouteLocationNormalizedLoaded = useRoute();
 const store: Store<StoreStateType> = useStore();
 
 const telegramAuthService: ITelegramAuthService = inject(
   ServiceProviderKeys.TELEGRAM_AUTH_SERVICE
-);
-const telegramChatsService: ITelegramChatsService = inject(
-  ServiceProviderKeys.TELEGRAM_CHATS_SERVICE
 );
 
 const isLoggedIntoTelegramComputed = computed(
@@ -105,19 +101,9 @@ async function initialise(): Promise<void> {
       isAuthorised
     );
 
-    await fetchChats();
     isInitialisingTelegram.value = false;
   } catch (error) {
     LoggerUtils.error("DashboardPage", "initialise", error);
-  }
-}
-
-async function fetchChats(): Promise<void> {
-  try {
-    const chats = await telegramChatsService.getAll();
-    await store.dispatch(TelegramStoreActions.UPDATE_TELEGRAM_CHATS, chats);
-  } catch (error) {
-    LoggerUtils.error("DashboardPage", "fetchChats", error);
   }
 }
 
@@ -138,7 +124,9 @@ watchEffect(() => {
   }
 });
 
-initialise();
+onMounted(() => {
+  initialise();
+});
 </script>
 
 <style lang="scss" scoped>

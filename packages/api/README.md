@@ -73,6 +73,9 @@ $ npx prisma migrate dev --name init
 
 # Deploys the current prisma schema to the database by creating the database and tables needed.
 $ npx prisma migrate deploy
+
+# To open prisma studio to view your database and tables on a GUI
+$ npx prisma studio
 ```
 
 ---
