@@ -5,20 +5,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.development
+    env_file:
+      - webserver.env
     volumes:
       # Made readonly so container cannot change host file system,
       # only host will be allowed to write files to container.
-      - .:/app:ro
+      - .:/app
       # Persist the node_modules inside the container so npm and libraries work
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
 
-  database:
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=my_secret_password
-      - POSTGRES_DB=telegramworkflowdb
-    # Uncomment if persistence of DB data is needed
-    #volumes:
-    #  - ./pgdata:/var/lib/postgresql/data
+  postgres:
+    env_file:
+      - database.env
+    # Comment / Uncomment if persistence of DB data is needed / not needed
+    # volumes:
+    #   - ./database-data:/var/lib/postgresql/data
+# Comment / Uncomment if persistence of DB data is needed / not needed
+# volumes:
+#   database-data:

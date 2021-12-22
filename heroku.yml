@@ -5,7 +5,3 @@ setup:
 build:
   docker:
     web: Dockerfile
-release:
-  image: web
-  command:
-    - npx prisma migrate deploy

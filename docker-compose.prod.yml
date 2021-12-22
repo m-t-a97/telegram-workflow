@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  webserver:
+    env_file:
+      - webserver.env
+
+  postgres:
+    env_file:
+      - database.env

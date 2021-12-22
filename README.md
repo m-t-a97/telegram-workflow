@@ -52,28 +52,36 @@ Organise the order of imports in files to make it more readable and understandab
 
 The best way to work during development is to run docker-compose to spin up both the webserver and database:
 
-```bash
-# Runs docker compose to use the main docker compose file as the base file and then using the second file to choose which environment to run on. (This runs in development mode)
-$ docker-compose -f docker-compose.yml docker-compose.development.yml
+`Development`:
 
-# To run in production mode, you need to create a .env.compose file at the project root and specify the environment variables inside of it as shown in the .env.compose.example file.
-$ docker-compose -f docker-compose.yml docker-compose.production.yml --project-directory ./.env.compose
+```bash
+# Runs docker compose in development mode
+$ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 
 # To view the config of your running docker compose setup
 $ docker-compose config
+
+# To stop the docker compose services
+$ docker-compose -f docker-compose.yml -f docker-compose.dev.yml stop
+
+# To remove the docker compose services along with any volume mounts
+$ docker-compose -f docker-compose.yml -f docker-compose.dev.yml down -v
 ```
 
----
-
-## Production
-
-During production, the client app will be built and then served by the NestJS API via a static directory.
-
-Run the following commands in the root of the project to run it in production mode:
+`Production`:
 
 ```bash
-$ export NODE_ENV=production
-$ yarn run:prod
+# Runs docker compose in production mode.
+$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# To view the config of your running docker compose setup
+$ docker-compose config
+
+# To stop the docker compose services
+$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml stop
+
+# To remove the docker compose services along with any volume mounts
+$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml down -v
 ```
 
 ---

@@ -2,11 +2,14 @@ FROM node:16
 
 WORKDIR /app
 
-RUN npm i -g lerna yarn @nestjs/cli
+RUN npm i -g lerna @nestjs/cli
 
 COPY . ./
-RUN yarn bootstrap
 
-EXPOSE 3000 8080
+RUN yarn bootstrap && yarn build
+
+ENV PORT ${PORT}
+
+EXPOSE 3000 ${PORT}
 
 CMD [ "yarn", "start:dev" ]

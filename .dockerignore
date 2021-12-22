@@ -3,5 +3,7 @@ node_modules/
 .env*.local
 Dockerfile*
 docker-compose*.yml
+database.env
+webserver.env
 heroku.yml
 app.json

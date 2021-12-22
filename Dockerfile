@@ -30,8 +30,8 @@ WORKDIR /app/api
 RUN yarn add tslib@2.3.1
 
 ENV NODE_ENV production
-ENV PORT $PORT
+ENV PORT ${PORT}
 
-EXPOSE $PORT
+EXPOSE ${PORT}
 
-CMD [ "yarn", "start:prod" ]
+CMD [ "yarn", "migrate:start:prod" ]
