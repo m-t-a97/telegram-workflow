@@ -70,6 +70,9 @@ $ npx prisma generate
 
 # Run the initial migration to map the data models to the database schema and generate the migration files.
 $ npx prisma migrate dev --name init
+
+# Deploys the current prisma schema to the database by creating the database and tables needed.
+$ npx prisma migrate deploy
 ```
 
 ---
