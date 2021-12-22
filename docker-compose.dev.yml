@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    env_file:
+      - webserver.env
+    volumes:
+      # Made readonly so container cannot change host file system,
+      # only host will be allowed to write files to container.
+      - .:/app
+      # Persist the node_modules inside the container so npm and libraries work
+      - /app/node_modules
+
+  postgres:
+    env_file:
+      - database.env
+    # Comment / Uncomment if persistence of DB data is needed / not needed
+    # volumes:
+    #   - ./database-data:/var/lib/postgresql/data
+# Comment / Uncomment if persistence of DB data is needed / not needed
+# volumes:
+#   database-data:
