@@ -2,6 +2,8 @@
 
 FROM node:16-alpine AS builder
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /app
 
 RUN npm i -g lerna
