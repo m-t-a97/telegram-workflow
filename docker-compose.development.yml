@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    volumes:
+      # Made readonly so container cannot change host file system,
+      # only host will be allowed to write files to container.
+      - .:/app:ro
+      # Persist the node_modules inside the container so npm and libraries work
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  database:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=my_secret_password
+      - POSTGRES_DB=telegramworkflowdb
+    # Uncomment if persistence of DB data is needed
+    #volumes:
+    #  - ./pgdata:/var/lib/postgresql/data

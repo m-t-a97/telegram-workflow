@@ -1,2 +1,7 @@
+.devcontainer/
 node_modules/
-.env.*local
+.env*.local
+Dockerfile*
+docker-compose*.yml
+heroku.yml
+app.json

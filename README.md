@@ -50,18 +50,17 @@ Organise the order of imports in files to make it more readable and understandab
 
 - Current project's source code (e.g. `./some-folder ./some-file`)
 
-The best way to work during development is to run both the frontend and backend separately. Run the following commands in the respective folders:
-
-`packages/client`:
+The best way to work during development is to run docker-compose to spin up both the webserver and database:
 
 ```bash
-$ yarn serve
-```
+# Runs docker compose to use the main docker compose file as the base file and then using the second file to choose which environment to run on. (This runs in development mode)
+$ docker-compose -f docker-compose.yml docker-compose.development.yml
 
-`packages/api`:
+# To run in production mode, you need to create a .env.compose file at the project root and specify the environment variables inside of it as shown in the .env.compose.example file.
+$ docker-compose -f docker-compose.yml docker-compose.production.yml --project-directory ./.env.compose
 
-```bash
-$ yarn start:dev
+# To view the config of your running docker compose setup
+$ docker-compose config
 ```
 
 ---
