@@ -2,8 +2,6 @@
 
 FROM node:16-alpine AS builder
 
-ARG DEBIAN_FRONTEND=noninteractive
-
 WORKDIR /app
 
 RUN npm i -g lerna
@@ -16,11 +14,10 @@ RUN yarn bootstrap && yarn build
 
 FROM node:16-alpine AS runner
 
-ARG DEBIAN_FRONTEND=noninteractive
-
 WORKDIR /app
 
 COPY --from=builder /app/packages/api/dist ./api/dist
+COPY --from=builder /app/packages/api/prisma ./api/prisma
 COPY --from=builder /app/packages/api/node_modules ./api/node_modules
 COPY --from=builder /app/packages/api/package.json ./api/package.json
 COPY --from=builder /app/packages/client/dist ./client/dist
