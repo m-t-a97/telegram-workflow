@@ -58,27 +58,31 @@ export class TelegramChatAutomationsHandlerService extends AbstractTelegramChatA
         }
 
         if (_.isEqual(chatAutomation.sourceChatId, chatId)) {
-          chatAutomation.destinationChatIds.forEach((destChatId: string) => {
-            let media: Api.TypeMessageMedia = null;
+          chatAutomation.destinationChatIds.forEach(
+            async (destChatId: string) => {
+              let media: Api.TypeMessageMedia = null;
 
-            if (
-              !_.isEqual(
-                event.message.media.className.toLowerCase(),
-                "MessageMediaWebPage".toLowerCase()
-              )
-            ) {
-              media = event.message.media;
+              if (
+                !_.isEqual(
+                  event.message.media.className.toLowerCase(),
+                  "MessageMediaWebPage".toLowerCase()
+                )
+              ) {
+                media = event.message.media;
+              }
+
+              await client.sendMessage(destChatId, {
+                message: event.message.message,
+                file: media,
+              });
             }
-
-            client.sendMessage(destChatId, {
-              message: event.message.message,
-              file: media,
-            });
-          });
+          );
 
           break;
         }
       }
+
+      return Promise.resolve();
     } catch (error) {
       return Promise.reject(error);
     }
