@@ -1,13 +1,35 @@
 <template>
   <div class="chats-page-container">
-    <template v-if="!_.isEmpty(chatsProxy.chats)">
-      <h1 class="chats-page-title">All Chats</h1>
-      <ChatsList :chats="chatsProxy.chats" />
-    </template>
+    <div
+      v-if="isLoadingChats"
+      class="h-full w-full flex flex-row justify-center items-start"
+    >
+      <va-progress-circle
+        indeterminate
+        size="small"
+        :thickness="0.3"
+        :value="50"
+        color="#FFFFFF"
+      />
+    </div>
 
-    <h1 v-if="_.isEmpty(chatsProxy.chats)" class="chats-page-title">
-      You currently have no chats...
-    </h1>
+    <template v-if="!isLoadingChats">
+      <template v-if="_.isEmpty(errorMessage) && !_.isEmpty(chatsProxy.chats)">
+        <h1 class="chats-page-title">All Chats</h1>
+        <ChatsList :chats="chatsProxy.chats" />
+      </template>
+
+      <h1
+        v-if="_.isEmpty(errorMessage) && _.isEmpty(chatsProxy.chats)"
+        class="chats-page-title"
+      >
+        You currently have no chats...
+      </h1>
+
+      <va-alert v-if="!_.isEmpty(errorMessage)" color="danger">
+        {{ errorMessage }}
+      </va-alert>
+    </template>
   </div>
 </template>
 
@@ -17,6 +39,7 @@ import { Store, useStore } from "vuex";
 
 import { Api } from "telegram";
 import _ from "lodash";
+import { VaProgressCircle, VaAlert } from "vuestic-ui";
 
 import { LoggerUtils } from "@shared-core";
 
@@ -32,18 +55,28 @@ const telegramChatsService: ITelegramChatsService = inject(
   ServiceProviderKeys.TELEGRAM_CHATS_SERVICE
 );
 
+const isLoadingChats = ref<boolean>(false);
+const errorMessage = ref<string>("");
 const chatsProxy = reactive<{ chats: Api.Chat[] }>({ chats: [] });
 
 async function fetchChats(): Promise<void> {
   try {
+    errorMessage.value = "";
+    isLoadingChats.value = true;
+
     const fetchedChats = await telegramChatsService.getAll();
     chatsProxy.chats = fetchedChats;
+
     await store.dispatch(
       TelegramStoreActions.UPDATE_TELEGRAM_CHATS,
       chatsProxy.chats
     );
+
+    isLoadingChats.value = false;
   } catch (error) {
     LoggerUtils.error("ChatsPage", "fetchChats", error);
+    isLoadingChats.value = false;
+    errorMessage.value = error.message;
   }
 }
 

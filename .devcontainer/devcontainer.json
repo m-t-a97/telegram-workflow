@@ -27,7 +27,8 @@
     "mike-co.import-sorter",
     "pflannery.vscode-versionlens",
     "johnsoncodehk.volar",
-    "prisma.prisma"
+    "prisma.prisma",
+    "bradlc.vscode-tailwindcss"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.

@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 import _ from "lodash";
 import { Api, TelegramClient } from "telegram";
@@ -14,6 +15,7 @@ import {
 import { AbstractTelegramAuthService } from "./abstract-telegram-auth.service";
 import { AbstractAuthService } from "./abstract-auth.service";
 import { AbstractTelegramChatAutomationsHandlerService } from "../chat-automations/abstract-telegram-chat-automations-handler.service";
+import { EnvironmentVariables } from "src/constants/environment-variables";
 
 @Injectable()
 export class TelegramAuthService extends AbstractTelegramAuthService {
@@ -24,6 +26,7 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
   private client: TelegramClient;
 
   constructor(
+    private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly authService: AbstractAuthService,
     private readonly telegramChatAutomationsHandlerService: AbstractTelegramChatAutomationsHandlerService
   ) {
@@ -37,7 +40,10 @@ export class TelegramAuthService extends AbstractTelegramAuthService {
 
       this.apiId = parseInt(apiId);
       this.apiHash = apiHash;
-      this.stringSession = new StringSession();
+      this.stringSession = new StringSession(
+        this.configService.get<string>("SESSION_STRING", "")
+      );
+      this.stringSession.load();
 
       this.client = new TelegramClient(
         this.stringSession,
