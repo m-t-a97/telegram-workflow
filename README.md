@@ -10,6 +10,10 @@ A self hosted telegram automation app that allows you to create workflows to aut
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
+<br />
+
+<span style="color: red">NOTE:</span> Once the app is deployed, add a `Heroku Postgres` add-on.
+
 ---
 
 ## Setup
