@@ -54,7 +54,16 @@ Organise the order of imports in files to make it more readable and understandab
 
 - Current project's source code (e.g. `./some-folder ./some-file`)
 
-The best way to work during development is to run docker-compose to spin up both the webserver and database:
+You have two options you can use for developing:
+
+- develop inside of a container using Remote-Containers
+- docker-compose
+
+### Devcontainers
+
+Using VSCode, run the command `Remote-Containers: Open Folder in Container...` which will spin up a remote container with all the necessary extensions required for you to develop inside of the container along with the source code.
+
+### Docker Compose
 
 `Development`:
 
