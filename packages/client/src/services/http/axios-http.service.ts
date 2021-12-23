@@ -12,8 +12,6 @@ export class AxiosHttpService implements IHttpService {
     } else {
       this.apiUrl = process.env.VUE_APP_API_URL;
     }
-
-    console.log("API URL:", this.apiUrl);
   }
 
   public async get<T>(

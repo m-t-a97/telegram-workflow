@@ -16,12 +16,17 @@
       "required": true
     },
     "API_KEY": {
-      "description": "An auto generated unique password that gives you access to the app on your server instance.",
+      "description": "(auto-configured) An auto generated unique password that gives you access to the app on your server instance.",
       "generator": "secret",
       "required": false
     },
+    "SESSION_STRING": {
+      "description": "(Optional) You can pass in an existing session string to reuse a session without needing to reauthenticate again into this app.",
+      "value": "",
+      "required": false
+    },
     "PORT": {
-      "description": "The port you want to run your server on. By default it runs on PORT 8080.",
+      "description": "(Optional) The port you want to run your server on. By default it runs on PORT 8080.",
       "value": "8080",
       "required": false
     }
