@@ -58,25 +58,25 @@ export class TelegramChatAutomationsHandlerService extends AbstractTelegramChatA
         }
 
         if (_.isEqual(chatAutomation.sourceChatId, chatId)) {
+          const forwardMessages: Promise<Api.Message>[] = [];
+
           chatAutomation.destinationChatIds.forEach(
             async (destChatId: string) => {
-              let media: Api.TypeMessageMedia = null;
+              const isMessageMediaAWebpage = _.isEqual(
+                event.message.media?.className.toLowerCase(),
+                "MessageMediaWebPage".toLowerCase()
+              );
 
-              if (
-                !_.isEqual(
-                  event.message.media.className.toLowerCase(),
-                  "MessageMediaWebPage".toLowerCase()
-                )
-              ) {
-                media = event.message.media;
-              }
-
-              await client.sendMessage(destChatId, {
-                message: event.message.message,
-                file: media,
-              });
+              forwardMessages.push(
+                client.sendMessage(destChatId, {
+                  message: event.message.message,
+                  file: isMessageMediaAWebpage ? null : event.message.media,
+                })
+              );
             }
           );
+
+          await Promise.all(forwardMessages);
 
           break;
         }
