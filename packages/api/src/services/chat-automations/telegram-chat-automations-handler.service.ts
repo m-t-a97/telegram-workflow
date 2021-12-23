@@ -4,9 +4,10 @@ import _ from "lodash";
 import { NewMessage, NewMessageEvent } from "telegram/events";
 import { Api, TelegramClient } from "telegram";
 
+import { ChatAutomation } from "@/shared-core";
+
 import { AbstractTelegramChatAutomationsHandlerService } from "./abstract-telegram-chat-automations-handler.service";
 import { AbstractTelegramChatAutomationsDaoService } from "./abstract-telegram-chat-automations-dao.service";
-import { ChatAutomation } from "../../../../shared-core/src/models";
 
 @Injectable()
 export class TelegramChatAutomationsHandlerService extends AbstractTelegramChatAutomationsHandlerService {
@@ -58,8 +59,20 @@ export class TelegramChatAutomationsHandlerService extends AbstractTelegramChatA
 
         if (_.isEqual(chatAutomation.sourceChatId, chatId)) {
           chatAutomation.destinationChatIds.forEach((destChatId: string) => {
+            let media: Api.TypeMessageMedia = null;
+
+            if (
+              !_.isEqual(
+                event.message.media.className.toLowerCase(),
+                "MessageMediaWebPage".toLowerCase()
+              )
+            ) {
+              media = event.message.media;
+            }
+
             client.sendMessage(destChatId, {
               message: event.message.message,
+              file: media,
             });
           });
 
