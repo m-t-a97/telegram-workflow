@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import { RegexUtils } from "../../src/helpers/utils";
 
 describe("Regex Utils", () => {

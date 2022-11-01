@@ -1,9 +1,11 @@
+# Files
 .devcontainer/
 node_modules/
+
+# Folders
+
 .env*.local
 Dockerfile*
 docker-compose*.yml
 database.env
 webserver.env
-heroku.yml
-app.json

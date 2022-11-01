@@ -2,19 +2,31 @@
   "name": "Telegram Workflow",
   "build": {
     "dockerfile": "Dockerfile",
-    "args": { "VARIANT": "16" }
+    "args": {
+      "VARIANT": "16"
+    }
   },
-
   // Set *default* container specific settings.json values on container create.
   "settings": {
     "terminal.integrated.profiles.linux": {
-      "zsh (login)": {
-        "path": "zsh",
-        "args": ["-l"]
+      "zsh": {
+        "path": "/bin/zsh"
       }
-    }
+    },
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "workbench.iconTheme": "vscode-icons",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "telemetry.telemetryLevel": "off",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active"
   },
-
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "dbaeumer.vscode-eslint",
@@ -28,7 +40,9 @@
     "pflannery.vscode-versionlens",
     "johnsoncodehk.volar",
     "prisma.prisma",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "evondev.indent-rainbow-palettes",
+    "oderwat.indent-rainbow"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.

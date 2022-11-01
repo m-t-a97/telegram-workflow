@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import { IDUtils } from "../../src/helpers/utils";
 
 describe("ID Utils", () => {

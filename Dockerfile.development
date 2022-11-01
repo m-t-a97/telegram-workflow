@@ -2,14 +2,12 @@ FROM node:16
 
 WORKDIR /app
 
-RUN npm i -g lerna @nestjs/cli
-
 COPY . ./
 
-RUN yarn bootstrap && yarn build
+RUN yarn install
 
 ENV PORT ${PORT}
 
 EXPOSE 3000 ${PORT}
 
-CMD [ "yarn", "start:dev" ]
+CMD [ "yarn", "dev" ]
