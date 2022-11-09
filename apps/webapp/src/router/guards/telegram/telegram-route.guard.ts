@@ -9,7 +9,7 @@ import _ from "lodash";
 import { LoggerUtils } from "@/shared-core";
 
 import { RoutePaths } from "@/constants/route-paths";
-import store from "@/store";
+import store from "@/store/index";
 import { LocalStorageService } from "@/services/storage/local-storage.service";
 import { LocalStorageKeys } from "@/constants/local-storage-keys";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";

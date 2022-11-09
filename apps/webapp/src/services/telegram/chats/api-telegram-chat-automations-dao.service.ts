@@ -1,6 +1,6 @@
 import { ChatAutomation, HttpConstants, LoggerUtils } from "@/shared-core";
 
-import store, { StoreStateType } from "@/store";
+import store, { StoreStateType } from "@/store/index";
 import { APIEndpoints } from "@/constants/api-endpoints";
 import { IHttpService } from "@/services/http/i-http.service";
 import {

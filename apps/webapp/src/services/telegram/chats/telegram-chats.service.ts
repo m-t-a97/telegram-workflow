@@ -2,7 +2,7 @@ import { Api } from "telegram";
 
 import { HttpConstants } from "@/shared-core";
 
-import store, { StoreStateType } from "@/store";
+import store, { StoreStateType } from "@/store/index";
 import { ITelegramChatsService } from "./i-telegram-chats.service";
 import { IHttpService } from "@/services/http/i-http.service";
 import { APIEndpoints } from "@/constants/api-endpoints";

@@ -7,7 +7,7 @@ import {
   SignInResultType,
 } from "@/shared-core";
 
-import store, { StoreStateType } from "@/store";
+import store, { StoreStateType } from "@/store/index";
 import { ITelegramAuthService } from "./i-telegram-auth.service";
 import { IHttpService } from "@/services/http/i-http.service";
 import { APIEndpoints } from "@/constants/api-endpoints";

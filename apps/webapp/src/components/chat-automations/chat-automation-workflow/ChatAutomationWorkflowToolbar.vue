@@ -1,32 +1,8 @@
-<template>
-  <div class="chat-automation-workflow-toolbar">
-    <div class="chat-automation-workflow-toolbar-section-start">
-      <button type="button" class="mr-4" @click="router.back()">
-        <va-icon name="west" size="2.5rem" />
-      </button>
-
-      <va-input v-model="chatAutomationName" outline :error="chatAutomationName === ''"
-        error-messages="Name cannot be empty" @update:model-value="chatAutomationName$.next($event)" />
-    </div>
-
-    <div class="chat-automation-workflow-toolbar-section-end">
-      <va-switch class="mr-2" color="success" size="small" v-model="chatAutomationActive" :disabled="!isAutomationValid"
-        :loading="isActivatingAutomation" @update:model-value="chatAutomationActive$.next($event)" />
-
-      <span class="w-20 text-sm text-center font-bold" :class="{
-        'text-green-500': chatAutomationActive,
-      'text-red-500': !chatAutomationActive,
-      }">{{ chatAutomationActive ? "ACTIVE" : "INACTIVE" }}</span>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed, inject, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { Router } from "vue-router";
 
-import _ from "lodash";
 import { VaSwitch, VaIcon, VaInput } from "vuestic-ui";
 import {
   BehaviorSubject,
@@ -41,13 +17,12 @@ import { ChatAutomation, LoggerUtils, RxjsHelperUtils } from "@/shared-core";
 
 import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
+import { isNil } from "lodash";
 
-interface Props {
+const props = defineProps<{
   chatAutomation: ChatAutomation;
   isAutomationValid: boolean;
-}
-
-const props = defineProps<Props>();
+}>();
 
 const router: Router = useRouter();
 
@@ -71,7 +46,7 @@ function registerDebounceEffectOnChatAutomationNameInputEvent(): void {
       debounceTime(500),
       distinctUntilChanged(),
       tap(async (updatedName: string) => {
-        if (_.isNil(updatedName)) {
+        if (isNil(updatedName)) {
           return;
         }
 
@@ -102,7 +77,7 @@ function registerDebounceEffectOnChatAutomationActiveToggle(): void {
       distinctUntilChanged(),
       tap(async (updatedActive: boolean) => {
         try {
-          if (_.isNil(updatedActive)) {
+          if (isNil(updatedActive)) {
             return;
           }
 
@@ -174,20 +149,25 @@ watch(isAutomationValidComputed, () => {
 });
 </script>
 
-<style lang="scss" scoped>
-.chat-automation-workflow-toolbar {
-  @apply px-4 py-2 flex flex-row justify-between items-center bg-white;
+<template>
+  <div class="px-4 py-2 flex flex-row justify-between items-center bg-white">
+    <div class="flex flex-row justify-center items-center">
+      <button type="button" class="mr-4" @click="router.back()">
+        <va-icon name="west" size="2.5rem" />
+      </button>
 
-  .chat-automation-workflow-toolbar-section-start {
-    @apply flex flex-row justify-center items-center;
+      <va-input v-model="chatAutomationName" outline :error="chatAutomationName === ''"
+        error-messages="Name cannot be empty" @update:model-value="chatAutomationName$.next($event)" />
+    </div>
 
-    .chat-automation-workflow-name {
-      @apply px-4 py-2 text-sm font-bold border border-solid border-gray-400 rounded-md;
-    }
-  }
+    <div class="flex flex-row justify-center items-center">
+      <va-switch class="mr-2" color="success" size="small" v-model="chatAutomationActive" :disabled="!isAutomationValid"
+        :loading="isActivatingAutomation" @update:model-value="chatAutomationActive$.next($event)" />
 
-  .chat-automation-workflow-toolbar-section-end {
-    @apply flex flex-row justify-center items-center;
-  }
-}
-</style>
+      <span class="w-20 text-sm text-center font-bold" :class="{
+        'text-green-500': chatAutomationActive,
+        'text-red-500': !chatAutomationActive,
+      }">{{ chatAutomationActive ? "ACTIVE" : "INACTIVE" }}</span>
+    </div>
+  </div>
+</template>

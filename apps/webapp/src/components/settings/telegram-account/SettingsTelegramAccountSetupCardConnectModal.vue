@@ -1,86 +1,3 @@
-<template>
-  <va-modal v-model="showTelegramAccountSetupModalRef" size="small" overlay-opacity="0.2" hide-default-actions
-    :fullscreen="showModalInFullScreen" @click-outside="onEmitCloseModal()">
-    <template #header>
-      <h2 class="text-lg font-bold text-center">
-        Connect your telegram account
-      </h2>
-    </template>
-
-    <slot>
-      <div class="telegram-login-container">
-        <va-form class="flex flex-col justify-center items-center">
-          <template v-if="isMobileNumberStep">
-            <label class="text-center text-base font-bold text-black">Enter your phone number in international
-              format:</label>
-
-            <input type="text" class="text-input-box" placeholder="+441234567890" v-model="phoneNumber" />
-
-            <p class="error-message" v-if="errorMessage !== ''">
-              {{ errorMessage }}
-            </p>
-
-            <button type="button" class="p-2 rounded-md bg-green-300" :class="{
-              'text-black': phoneNumber !== '',
-            'cursor-not-allowed': phoneNumber === '',
-            }" :disabled="phoneNumber === ''" @click="onSendCode()">
-              Send Code
-            </button>
-          </template>
-
-          <template v-if="isAuthCodeStep">
-            <label class="text-base font-bold text-black">Enter the authentication code:</label>
-
-            <input type="text" class="text-input-box" v-model="authCode" />
-
-            <p class="error-message" v-if="errorMessage !== ''">
-              {{ errorMessage }}
-            </p>
-
-            <button type="button" class="p-2 rounded-md bg-green-300" :class="{
-              'text-black': authCode !== '',
-              'cursor-not-allowed': authCode === '',
-            }" :disabled="authCode === ''" @click="onVerifyCode()">
-              Verify Code
-            </button>
-          </template>
-
-          <template v-if="isTwoFactorPasswordStep">
-            <label class="text-base font-bold text-black">Enter your 2FA password:</label>
-
-            <div class="two-factor-password-input-container">
-              <input :type="showTwoFactorPassword ? 'text' : 'password'" class="p-2 text-black border-none"
-                v-model="twoFactorPassword" />
-
-              <div class="two-factor-toggle-button-container">
-                <button type="button" @click="onToggleTwoFactorPassword()">
-                  <va-icon name="visibility" v-if="showTwoFactorPassword" />
-                  <va-icon name="visibility_off" v-if="!showTwoFactorPassword" />
-                </button>
-              </div>
-            </div>
-
-            <p class="error-message" v-if="errorMessage !== ''">
-              {{ errorMessage }}
-            </p>
-
-            <button type="button" class="p-2 rounded-md bg-green-300" :class="{
-              'text-black': twoFactorPassword !== '',
-              'cursor-not-allowed': twoFactorPassword === '',
-            }" :disabled="twoFactorPassword === ''" @click="onTwoFactorPasswordEntered()">
-              Verify Password
-            </button>
-          </template>
-        </va-form>
-      </div>
-    </slot>
-
-    <template #footer>
-      <va-button @click="onEmitCloseModal()">Cancel</va-button>
-    </template>
-  </va-modal>
-</template>
-
 <script lang="ts" setup>
 import { inject, onUnmounted, ref, watchEffect } from "vue";
 import { Store, useStore } from "vuex";
@@ -91,16 +8,14 @@ import { fromEvent, Subscription, tap } from "rxjs";
 
 import { LoggerUtils, RxjsHelperUtils } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
 
-interface Props {
+const props = defineProps<{
   showTelegramAccountSetupModal: boolean;
-}
-
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits(["toggle-telegram-account-setup-modal"]);
 
@@ -267,32 +182,88 @@ watchEffect(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.telegram-login-container {
-  @apply p-4;
+<template>
+  <va-modal v-model="showTelegramAccountSetupModalRef" size="small" overlay-opacity="0.2" hide-default-actions
+    :fullscreen="showModalInFullScreen" @click-outside="onEmitCloseModal()">
+    <template #header>
+      <h2 class="text-lg font-bold text-center">
+        Connect your telegram account
+      </h2>
+    </template>
 
-  .text-input-box {
-    @apply my-4 p-2 text-black border border-solid border-black rounded-md;
-  }
+    <slot>
+      <div class="p-4">
+        <va-form class="flex flex-col justify-center items-center">
+          <template v-if="isMobileNumberStep">
+            <label class="text-center text-base font-bold text-black">Enter your phone number in international
+              format:</label>
 
-  .error-message {
-    @apply my-2 text-sm text-red-500 font-bold;
-  }
+            <input type="text" class="my-4 p-2 text-black border border-solid border-black rounded-md"
+              placeholder="+441234567890" v-model="phoneNumber" />
 
-  .two-factor-password-input-container {
-    @apply h-12 my-4 flex flex-row justify-center items-center border-2 border-solid border-black rounded-md;
+            <p class="my-2 text-sm text-red-500 font-bold" v-if="errorMessage !== ''">
+              {{ errorMessage }}
+            </p>
 
-    input {
-      @apply focus: outline-none;
-    }
+            <button type="button" class="p-2 rounded-md bg-green-300" :class="{
+              'text-black': phoneNumber !== '',
+              'cursor-not-allowed': phoneNumber === '',
+            }" :disabled="phoneNumber === ''" @click="onSendCode()">
+              Send Code
+            </button>
+          </template>
 
-    .two-factor-toggle-button-container {
-      @apply h-full w-full flex flex-row border-l-2 border-gray-500;
+          <template v-if="isAuthCodeStep">
+            <label class="text-base font-bold text-black">Enter the authentication code:</label>
 
-      button {
-        @apply h-3/5 w-3/5 mx-2 my-auto;
-      }
-    }
-  }
-}
-</style>
+            <input type="text" class="my-4 p-2 text-black border border-solid border-black rounded-md"
+              v-model="authCode" />
+
+            <p class="my-2 text-sm text-red-500 font-bold" v-if="errorMessage !== ''">
+              {{ errorMessage }}
+            </p>
+
+            <button type="button" class="p-2 rounded-md bg-green-300" :class="{
+              'text-black': authCode !== '',
+              'cursor-not-allowed': authCode === '',
+            }" :disabled="authCode === ''" @click="onVerifyCode()">
+              Verify Code
+            </button>
+          </template>
+
+          <template v-if="isTwoFactorPasswordStep">
+            <label class="text-base font-bold text-black">Enter your 2FA password:</label>
+
+            <div
+              class="h-12 my-4 flex flex-row justify-center items-center border-2 border-solid border-black rounded-md">
+              <input :type="showTwoFactorPassword ? 'text' : 'password'"
+                class="p-2 text-black border-none focus:outline-none" v-model="twoFactorPassword" />
+
+              <div class="h-full w-full flex flex-row border-l-2 border-gray-500">
+                <button type="button" class="h-3/5 w-3/5 mx-2 my-auto" @click="onToggleTwoFactorPassword()">
+                  <va-icon name="visibility" v-if="showTwoFactorPassword" />
+                  <va-icon name="visibility_off" v-if="!showTwoFactorPassword" />
+                </button>
+              </div>
+            </div>
+
+            <p class="my-2 text-sm text-red-500 font-bold" v-if="errorMessage !== ''">
+              {{ errorMessage }}
+            </p>
+
+            <button type="button" class="p-2 rounded-md bg-green-300" :class="{
+              'text-black': twoFactorPassword !== '',
+              'cursor-not-allowed': twoFactorPassword === '',
+            }" :disabled="twoFactorPassword === ''" @click="onTwoFactorPasswordEntered()">
+              Verify Password
+            </button>
+          </template>
+        </va-form>
+      </div>
+    </slot>
+
+    <template #footer>
+      <va-button @click="onEmitCloseModal()">Cancel</va-button>
+    </template>
+  </va-modal>
+</template>

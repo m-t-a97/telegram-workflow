@@ -4,7 +4,7 @@ import { SentCodeResultType, SignInResultType } from "@/shared-core";
 
 import { AbstractTelegramAuthService } from "src/services/auth/abstract-telegram-auth.service";
 
-@Controller("api/telegram-auth")
+@Controller("telegram-auth")
 export class TelegramAuthController {
   constructor(
     private readonly telegramAuthService: AbstractTelegramAuthService

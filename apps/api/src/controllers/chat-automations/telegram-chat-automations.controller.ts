@@ -14,7 +14,7 @@ import { ChatAutomation } from "@/shared-core";
 
 import { AbstractTelegramChatAutomationsDaoService as AbstractTelegramChatAutomationsDaoService } from "src/services/chat-automations/abstract-telegram-chat-automations-dao.service";
 
-@Controller("api/chat-automations")
+@Controller("chat-automations")
 export class TelegramChatAutomationsController {
   constructor(
     private readonly telegramChatAutomationsDaoService: AbstractTelegramChatAutomationsDaoService

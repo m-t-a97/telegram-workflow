@@ -8,7 +8,7 @@ import _ from "lodash";
 
 import { LoggerUtils } from "@/shared-core";
 
-import store, { StoreStateType } from "@/store";
+import store, { StoreStateType } from "@/store/index";
 import { AuthStoreActions } from "@/store/modules/auth.store";
 import { RoutePaths } from "@/constants/route-paths";
 import { LocalStorageService } from "@/services/storage/local-storage.service";

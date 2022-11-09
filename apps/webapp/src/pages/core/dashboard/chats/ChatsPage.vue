@@ -1,26 +1,3 @@
-<template>
-  <div class="chats-page-container">
-    <div v-if="isLoadingChats" class="h-full w-full flex flex-row justify-center items-start">
-      <va-progress-circle indeterminate size="small" :thickness="0.3" :value="50" color="#FFFFFF" />
-    </div>
-
-    <template v-if="!isLoadingChats">
-      <template v-if="_.isEmpty(errorMessage) && !_.isEmpty(chatsProxy.chats)">
-        <h1 class="chats-page-title">All Chats</h1>
-        <ChatsList :chats="chatsProxy.chats" />
-      </template>
-
-      <h1 v-if="_.isEmpty(errorMessage) && _.isEmpty(chatsProxy.chats)" class="chats-page-title">
-        You currently have no chats...
-      </h1>
-
-      <va-alert v-if="!_.isEmpty(errorMessage)" color="danger">
-        {{ errorMessage }}
-      </va-alert>
-    </template>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { inject, onMounted, reactive, ref } from "vue";
 import { Store, useStore } from "vuex";
@@ -31,7 +8,7 @@ import { VaProgressCircle, VaAlert } from "vuestic-ui";
 
 import { LoggerUtils } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
 import ChatsList from "@/components/chats/ChatsList.vue";
 import { ITelegramChatsService } from "@/services/telegram/chats/i-telegram-chats.service";
@@ -75,12 +52,27 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.chats-page-container {
-  @apply h-full w-full p-4;
+<template>
+  <div class="h-full w-full p-4">
+    <div v-if="isLoadingChats" class="h-full w-full flex flex-row justify-center items-start">
+      <va-progress-circle indeterminate size="small" :thickness="0.3" :value="50" color="#FFFFFF" />
+    </div>
 
-  .chats-page-title {
-    @apply w-fit-content mx-auto mb-4 px-2 py-1 rounded-md text-2xl font-bold bg-white;
-  }
-}
-</style>
+    <template v-if="!isLoadingChats">
+      <template v-if="_.isEmpty(errorMessage) && !_.isEmpty(chatsProxy.chats)">
+        <h1 class="w-fit-content mx-auto mb-4 px-2 py-1 rounded-md text-2xl font-bold bg-white">All Chats</h1>
+        <ChatsList :chats="chatsProxy.chats" />
+      </template>
+
+      <h1 v-if="_.isEmpty(errorMessage) && _.isEmpty(chatsProxy.chats)"
+        class="w-fit-content mx-auto mb-4 px-2 py-1 rounded-md text-2xl font-bold bg-white">
+        You currently have no chats...
+      </h1>
+
+      <va-alert v-if="!_.isEmpty(errorMessage)" color="danger">
+        {{ errorMessage }}
+      </va-alert>
+    </template>
+  </div>
+</template>
+

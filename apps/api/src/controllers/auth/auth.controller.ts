@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 
 import { AbstractAuthService } from "src/services/auth/abstract-auth.service";
 
-@Controller("api/auth")
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AbstractAuthService) {}
 

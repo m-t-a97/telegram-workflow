@@ -2,7 +2,7 @@ import { Store, useStore } from "vuex";
 
 import { ChatAutomation } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 
 type FetchChatAutomationHookType = {
   fetchChatAutomation: (id: string) => ChatAutomation;

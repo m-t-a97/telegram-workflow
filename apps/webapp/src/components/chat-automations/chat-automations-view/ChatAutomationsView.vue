@@ -1,25 +1,4 @@
-<template>
-  <div class="chat-automations-view-container">
-    <div v-if="isFetchingChatAutomations" class="h-full w-full flex flex-row justify-center items-start">
-      <va-progress-circle indeterminate size="small" :thickness="0.3" :value="50" color="#FFFFFF" />
-    </div>
-
-    <div v-if="!isFetchingChatAutomations">
-      <ChatAutomationsViewActionButtons :chatAutomationsToggleStateMap="chatAutomationsToggleStateMap"
-        :haveChatAutomationsBeenSelectedForDeletion="
-          haveChatAutomationsBeenSelectedForDeletion
-        " @toggle-all-chat-automations="onToggleAllChatAutomations($event)"
-        @creating-new-automation="onCreatingNewAutomation()" @deleting-chat-automations="onDeletingChatAutomations()"
-        @chat-automations-deleted="onDeletedChatAutomations()" />
-
-      <ChatAutomationsViewList :chatAutomations="chatAutomations"
-        :chatAutomationsToggleStateMap="chatAutomationsToggleStateMap"
-        :isChatAutomationsBeingDeleted="isChatAutomationsBeingDeleted" @list-item-toggled="onListItemToggled($event)" />
-    </div>
-  </div>
-</template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref, computed, watch, inject } from "vue";
 import { Store, useStore } from "vuex";
 
@@ -27,7 +6,7 @@ import { VaProgressCircle } from "vuestic-ui";
 
 import { ChatAutomation, LoggerUtils } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 import ChatAutomationsViewActionButtons from "../chat-automations-view/ChatAutomationsViewActionButtons.vue";
 import ChatAutomationsViewList from "../chat-automations-view/ChatAutomationsViewList.vue";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
@@ -131,10 +110,23 @@ fetchChatAutomations();
 watchForChanges();
 </script>
 
-<style lang="scss" scoped>
-.chat-automations-view-container {
-  .chat-automations-list {
-    @apply mt-4 p-0 rounded-md bg-white;
-  }
-}
-</style>
+<template>
+  <div>
+    <div v-if="isFetchingChatAutomations" class="h-full w-full flex flex-row justify-center items-start">
+      <va-progress-circle indeterminate size="small" :thickness="0.3" :value="50" color="#FFFFFF" />
+    </div>
+
+    <div v-if="!isFetchingChatAutomations">
+      <ChatAutomationsViewActionButtons :chatAutomationsToggleStateMap="chatAutomationsToggleStateMap"
+        :haveChatAutomationsBeenSelectedForDeletion="
+          haveChatAutomationsBeenSelectedForDeletion
+        " @toggle-all-chat-automations="onToggleAllChatAutomations($event)"
+        @creating-new-automation="onCreatingNewAutomation()" @deleting-chat-automations="onDeletingChatAutomations()"
+        @chat-automations-deleted="onDeletedChatAutomations()" />
+
+      <ChatAutomationsViewList :chatAutomations="chatAutomations"
+        :chatAutomationsToggleStateMap="chatAutomationsToggleStateMap"
+        :isChatAutomationsBeingDeleted="isChatAutomationsBeingDeleted" @list-item-toggled="onListItemToggled($event)" />
+    </div>
+  </div>
+</template>

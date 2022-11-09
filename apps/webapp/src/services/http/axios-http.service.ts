@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import _ from "lodash";
+import { isEqual } from "lodash";
 
 import { IHttpService } from "./i-http.service";
 
@@ -7,10 +7,10 @@ export class AxiosHttpService implements IHttpService {
   private readonly apiUrl: string;
 
   constructor() {
-    if (_.isEqual(process.env.NODE_ENV, "production")) {
+    if (isEqual(import.meta.env.MODE, "production")) {
       this.apiUrl = window.location.origin;
     } else {
-      this.apiUrl = process.env.VUE_APP_API_URL;
+      this.apiUrl = import.meta.env.VITE_API_URL;
     }
   }
 

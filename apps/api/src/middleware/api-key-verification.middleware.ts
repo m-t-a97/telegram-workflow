@@ -1,9 +1,8 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-import _ from "lodash";
+import { isEqual } from "lodash";
 import { Request, Response, NextFunction } from "express";
-import { createHmac } from "crypto";
 
 import { HttpConstants } from "@/shared-core";
 
@@ -16,13 +15,11 @@ export class ApiKeyVerificationMiddleware implements NestMiddleware {
   ) {}
 
   use(request: Request, response: Response, next: NextFunction) {
-    const hashedApiKey: string = createHmac(
-      "sha256",
-      this.configService.get<string>("API_KEY")
-    ).digest("hex");
-
     if (
-      _.isEqual(hashedApiKey, request.headers[HttpConstants.API_KEY_HEADER])
+      isEqual(
+        request.headers[HttpConstants.API_KEY_HEADER],
+        this.configService.get<string>("API_KEY")
+      )
     ) {
       next();
     } else {

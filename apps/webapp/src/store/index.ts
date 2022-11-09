@@ -8,7 +8,7 @@ import telegramStore, {
 } from "./modules/telegram.store";
 import userStore, { UserStoreStateType } from "./modules/user.store";
 
-const debugModeEnabled = !isEqual(process.env.NODE_ENV, "production");
+const debugModeEnabled = !isEqual(import.meta.env.MODE, "production");
 
 export type StoreStateType = {
   authStore: AuthStoreStateType;

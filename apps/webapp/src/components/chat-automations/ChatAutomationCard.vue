@@ -1,34 +1,28 @@
+<script setup lang="ts">
+import { VaCard, VaCardContent } from "vuestic-ui";
+
+import { ChatAutomation } from "@/shared-core";
+
+defineProps<{
+  chatAutomation: ChatAutomation;
+}>();
+</script>
+
 <template>
-  <router-link :to="`/workflow/chat-automation-workflow/${props.chatAutomation.id}`">
+  <router-link :to="`/workflow/chat-automation-workflow/${chatAutomation.id}`">
     <va-card>
       <va-card-content>
         <div class="flex flex-row justify-between items-center">
-          <p>{{ props.chatAutomation.name }}</p>
+          <p>{{ chatAutomation.name }}</p>
 
           <p class="text-base font-bold" :class="{
-            'text-green-500': props.chatAutomation.active,
-          'text-red-500': !props.chatAutomation.active,
+            'text-green-500': chatAutomation.active,
+            'text-red-500': !chatAutomation.active,
           }">
-            {{ props.chatAutomation.active ? "ACTIVE" : "INACTIVE" }}
+            {{ chatAutomation.active ? "ACTIVE" : "INACTIVE" }}
           </p>
         </div>
       </va-card-content>
     </va-card>
   </router-link>
 </template>
-
-<script lang="ts" setup>
-import { VaCard, VaCardContent } from "vuestic-ui";
-
-import { ChatAutomation } from "@/shared-core";
-
-interface Props {
-  chatAutomation: ChatAutomation;
-}
-
-const props = defineProps<Props>();
-</script>
-
-<style lang="scss" scoped>
-
-</style>

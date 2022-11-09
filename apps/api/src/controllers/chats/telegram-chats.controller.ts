@@ -2,7 +2,7 @@ import { Controller, Get } from "@nestjs/common";
 
 import { AbstractChatsService } from "src/services/chats/abstract-chats.service";
 
-@Controller("api/chats")
+@Controller("chats")
 export class TelegramChatsController {
   constructor(private readonly chatsService: AbstractChatsService) {}
 

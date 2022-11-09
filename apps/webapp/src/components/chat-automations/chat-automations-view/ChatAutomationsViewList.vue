@@ -1,6 +1,51 @@
+<script setup lang="ts">
+import { ref, watch } from "vue";
+
+import {
+  VaCheckbox,
+  VaList,
+  VaListItem,
+  VaListItemLabel,
+  VaListItemSection,
+  VaInnerLoading,
+} from "vuestic-ui";
+
+import { ChatAutomation } from "@/shared-core";
+
+const props = defineProps<{
+  chatAutomations: ChatAutomation[];
+  chatAutomationsToggleStateMap: Record<string, boolean>;
+  isChatAutomationsBeingDeleted: boolean;
+}>();
+
+const emit = defineEmits(["list-item-toggled"]);
+
+const chatAutomationListItemCheckboxMap = ref<Record<string, boolean>>({});
+
+function onCheckedListItem(id: string) {
+  emit("list-item-toggled", {
+    id,
+    value: chatAutomationListItemCheckboxMap.value[id],
+  });
+}
+
+function watchForChanges(): void {
+  watchAutomationsToggleStateMapForChanges();
+}
+
+function watchAutomationsToggleStateMapForChanges(): void {
+  watch(props.chatAutomationsToggleStateMap, (newValue) => {
+    chatAutomationListItemCheckboxMap.value = newValue;
+  });
+}
+
+watchForChanges();
+</script>
+
 <template>
-  <va-list class="chat-automations-list">
-    <va-list-item v-for="chatAutomation in props.chatAutomations" :key="chatAutomation.id">
+  <va-list class="mt-8 flex flex-col justify-center items-center gap-4">
+    <va-list-item v-for="chatAutomation in props.chatAutomations" :key="chatAutomation.id"
+      class="bg-white rounded-md p-3 flex-1 w-full">
       <va-inner-loading class="w-full" icon="loop" :size="20" :loading="
         props.isChatAutomationsBeingDeleted &&
         chatAutomationsToggleStateMap[chatAutomation.id]
@@ -31,53 +76,3 @@
     </va-list-item>
   </va-list>
 </template>
-
-<script lang="ts" setup>
-import { ref, watch } from "vue";
-
-import {
-  VaCheckbox,
-  VaList,
-  VaListItem,
-  VaListItemLabel,
-  VaListItemSection,
-  VaInnerLoading,
-} from "vuestic-ui";
-
-import { ChatAutomation } from "@/shared-core";
-
-interface Props {
-  chatAutomations: ChatAutomation[];
-  chatAutomationsToggleStateMap: Record<string, boolean>;
-  isChatAutomationsBeingDeleted: boolean;
-}
-
-const props = defineProps<Props>();
-
-const emit = defineEmits(["list-item-toggled"]);
-
-const chatAutomationListItemCheckboxMap = ref<Record<string, boolean>>({});
-
-function onCheckedListItem(id: string) {
-  emit("list-item-toggled", {
-    id,
-    value: chatAutomationListItemCheckboxMap.value[id],
-  });
-}
-
-function watchForChanges(): void {
-  watchAutomationsToggleStateMapForChanges();
-}
-
-function watchAutomationsToggleStateMapForChanges(): void {
-  watch(props.chatAutomationsToggleStateMap, (newValue) => {
-    chatAutomationListItemCheckboxMap.value = newValue;
-  });
-}
-
-watchForChanges();
-</script>
-
-<style lang="scss">
-
-</style>

@@ -6,8 +6,6 @@ COPY . ./
 
 RUN yarn install
 
-ENV PORT ${PORT}
-
-EXPOSE 3000 ${PORT}
+EXPOSE 3001 8081
 
 CMD [ "yarn", "dev" ]

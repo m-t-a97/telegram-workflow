@@ -1,12 +1,4 @@
-<template>
-  <div>
-    <va-modal v-model="showTelegramAccountDisconnectModalRef" size="medium" ok-text="YES" cancel-text="NO"
-      :title="modalTitle" :message="modalMessage" :fullscreen="showModalInFullScreen"
-      @ok="onDisconnectTelegramAccount()" @cancel="onEmitCloseModal()" @click-outside="onEmitCloseModal()" />
-  </div>
-</template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
 import { inject, onUnmounted, ref, watchEffect } from "vue";
 import { Store, useStore } from "vuex";
 
@@ -15,16 +7,14 @@ import { fromEvent, Subscription, tap } from "rxjs";
 
 import { RxjsHelperUtils } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 import { TelegramStoreActions } from "@/store/modules/telegram.store";
 import { ITelegramAuthService } from "@/services/telegram/auth/i-telegram-auth.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 
-interface Props {
+const props = defineProps<{
   showTelegramAccountDisconnectModal: boolean;
-}
-
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits(["toggle-telegram-account-disconnect-modal"]);
 
@@ -58,7 +48,6 @@ function watchScreenWidth(): void {
 }
 
 async function onDisconnectTelegramAccount(): Promise<void> {
-  await telegramAuthService.disconnect();
   await store.dispatch(
     TelegramStoreActions.UPDATE_IS_LOGGED_INTO_TELEGRAM,
     false
@@ -82,6 +71,10 @@ watchEffect(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<template>
+  <div>
+    <va-modal v-model="showTelegramAccountDisconnectModalRef" size="medium" ok-text="YES" cancel-text="NO"
+      :title="modalTitle" :message="modalMessage" :fullscreen="showModalInFullScreen"
+      @ok="onDisconnectTelegramAccount()" @cancel="onEmitCloseModal()" @click-outside="onEmitCloseModal()" />
+  </div>
+</template>

@@ -1,41 +1,20 @@
-<template>
-  <div class="chat-automation-workflow-chats-selection-container">
-    <div class="chat-selection-container">
-      <p class="mb-2 text-base font-bold text-black">Source</p>
-      <va-select v-model="sourceChat" :options="chatsOptions"
-        :text-by="(chatSelection: ChatSelectionType) => chatSelection.chatName" />
-    </div>
-
-    <va-icon name="arrow_circle_down" class="my-8 text-white" size="2.5rem" />
-
-    <div class="chat-selection-container">
-      <p class="mb-2 text-base font-bold text-black">Destination</p>
-
-      <va-select v-model="selectedChatDestinations" multiple :max-selections="5" :options="availableChatDestinations"
-        :text-by="(chatSelection: ChatSelectionType) => chatSelection.chatName" />
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed, inject, ref, watch, watchEffect } from "vue";
 import { Store, useStore } from "vuex";
 
-import _ from "lodash";
 import { VaIcon, VaSelect } from "vuestic-ui";
 import { Api } from "telegram";
+import { isNil, isEmpty, isEqual, has } from "lodash";
 
 import { ChatAutomation, LoggerUtils } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 
-interface Props {
+const props = defineProps<{
   chatAutomation: ChatAutomation;
-}
-
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits(["is-automation-valid"]);
 
@@ -59,8 +38,8 @@ const selectedChatDestinations = ref<ChatSelectionType[]>([]);
 
 const isAutomationValid = computed(
   () =>
-    !_.isNil(sourceChat.value.chatId) &&
-    !_.isEmpty(selectedChatDestinations.value)
+    !isNil(sourceChat.value.chatId) &&
+    !isEmpty(selectedChatDestinations.value)
 );
 
 function initialise(): void {
@@ -76,11 +55,12 @@ function buildChatAutomationForUI(): void {
 
 function mapAllChatsToChatSelections(): void {
   const chats = [...store.state.telegramStore.chats];
+  console.log(chats);
 
   chatsOptions.value = chats.map((chat: Api.TypeChat, index: number) => {
     type GroupOrChannel = Api.Chat | Api.Channel;
 
-    const isChannel = _.has(chat, "broadcast");
+    const isChannel = has(chat, "broadcast");
     const chatId = isChannel ? `-100${chat.id}` : `-${chat.id}`;
 
     return {
@@ -96,10 +76,10 @@ function mapAllChatsToChatSelections(): void {
 function initialiseSourceChat(): void {
   const sourceChatId = props.chatAutomation.sourceChatId;
 
-  if (!_.isNil(sourceChatId)) {
+  if (!isNil(sourceChatId)) {
     sourceChat.value = chatsOptions.value.find(
       (chatSelection: ChatSelectionType) =>
-        _.isEqual(chatSelection.chatId, sourceChatId)
+        isEqual(chatSelection.chatId, sourceChatId)
     );
   } else {
     sourceChat.value = {} as any;
@@ -109,7 +89,7 @@ function initialiseSourceChat(): void {
 function updateAvailableChatDestinations(): void {
   availableChatDestinations.value = chatsOptions.value.filter(
     (chatDestinationSelection: ChatSelectionType) => {
-      const isNotSourceChat = !_.isEqual(
+      const isNotSourceChat = !isEqual(
         chatDestinationSelection.chatId,
         sourceChat.value.chatId
       );
@@ -129,17 +109,17 @@ function updateAvailableChatDestinations(): void {
 }
 
 function initialiseSelectedChatDestinations(): void {
-  if (!_.isEmpty(props.chatAutomation.destinationChatIds)) {
+  if (!isEmpty(props.chatAutomation.destinationChatIds)) {
     const destinationChatIds = props.chatAutomation.destinationChatIds;
 
     for (let i = 0; i < destinationChatIds.length; i++) {
       const foundDestinationChat: ChatSelectionType =
         availableChatDestinations.value.find(
           (chatSelection: ChatSelectionType) =>
-            _.isEqual(chatSelection.chatId, destinationChatIds[i])
+            isEqual(chatSelection.chatId, destinationChatIds[i])
         );
 
-      if (!_.isNil(foundDestinationChat)) {
+      if (!isNil(foundDestinationChat)) {
         selectedChatDestinations.value.push(foundDestinationChat);
       }
     }
@@ -202,7 +182,7 @@ watch(sourceChat, async (newValue: ChatSelectionType) => {
 });
 
 watch(selectedChatDestinations, (newValue: ChatSelectionType[]) => {
-  if (_.isEmpty(newValue)) {
+  if (isEmpty(newValue)) {
     emit("is-automation-valid", false);
   }
 
@@ -210,16 +190,27 @@ watch(selectedChatDestinations, (newValue: ChatSelectionType[]) => {
 });
 </script>
 
+<template>
+  <div class="mt-8 flex flex-col justify-start items-center">
+    <div class="p-4 flex flex-col justify-center items-center rounded-md bg-white">
+      <p class="mb-2 text-base font-bold text-black">Source</p>
+      <va-select v-model="sourceChat" :options="chatsOptions"
+        :text-by="(chatSelection: ChatSelectionType) => chatSelection.chatName" />
+    </div>
+
+    <va-icon name="arrow_circle_down" class="my-8 text-white" size="2.5rem" />
+
+    <div class="p-4 flex flex-col justify-center items-center rounded-md bg-white">
+      <p class="mb-2 text-base font-bold text-black">Destination</p>
+
+      <va-select v-model="selectedChatDestinations" multiple :max-selections="5" :options="availableChatDestinations"
+        :text-by="(chatSelection: ChatSelectionType) => chatSelection.chatName" />
+    </div>
+  </div>
+</template>
+
 <style lang="scss">
-.chat-automation-workflow-chats-selection-container {
-  @apply mt-8 flex flex-col justify-start items-center;
-
-  .chat-selection-container {
-    @apply p-4 flex flex-col justify-center items-center rounded-md bg-white;
-
-    .va-input-wrapper {
-      @apply border border-solid border-gray-300 rounded-sm;
-    }
-  }
+.va-input-wrapper {
+  @apply border border-solid border-gray-300 rounded-sm;
 }
 </style>

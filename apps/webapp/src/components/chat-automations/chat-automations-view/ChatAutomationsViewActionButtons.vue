@@ -1,26 +1,3 @@
-<template>
-  <div class="chat-automations-view-action-buttons-container">
-    <va-button-group outline :rounded="false">
-      <va-button v-if="chatAutomations.length > 0 || isChatAutomationsBeingDeleted" :rounded="false"
-        :loading="isChatAutomationsBeingDeleted" :disabled="
-          isNewAutomationCreationInProgress || isChatAutomationsBeingDeleted
-        ">
-        <va-checkbox v-model="isCheckboxChecked" color="#000000" />
-      </va-button>
-
-      <va-button v-if="chatAutomations.length > 0 || isChatAutomationsBeingDeleted" color="#EF4444" text-color="#EF4444"
-        :rounded="false" :loading="isChatAutomationsBeingDeleted" :disabled="
-          isNewAutomationCreationInProgress ||
-          !isAnyChatAutomationSelectedForDeletion ||
-          isChatAutomationsBeingDeleted
-        " @click="onDeleteSelectedAutomations()">Trash</va-button>
-
-      <va-button color="#10B981" text-color="#10B981" :rounded="false" :loading="isNewAutomationCreationInProgress"
-        :disabled="isNewAutomationCreationInProgress" @click="onCreateNewAutomation()">Create Automation</va-button>
-    </va-button-group>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed, inject, ref, watch, watchEffect } from "vue";
 import { Store, useStore } from "vuex";
@@ -31,16 +8,14 @@ import { VaButtonGroup, VaButton, VaCheckbox } from "vuestic-ui";
 
 import { ChatAutomation, LoggerUtils } from "@/shared-core";
 
-import { StoreStateType } from "@/store";
+import { StoreStateType } from "@/store/index";
 import { ITelegramChatAutomationsDaoService } from "@/services/telegram/chats/i-telegram-chat-automations-dao.service";
 import { ServiceProviderKeys } from "@/services/service-provider-keys";
 import { RoutePaths } from "@/constants/route-paths";
 
-interface Props {
+const props = defineProps<{
   chatAutomationsToggleStateMap: Record<string, boolean>;
-}
-
-const props = defineProps<Props>();
+}>();
 
 const emit = defineEmits([
   "creating-new-automation",
@@ -194,6 +169,25 @@ function watchForTogglingOfAllChatAutomations(): void {
 watchForChanges();
 </script>
 
-<style lang="scss" scoped>
+<template>
+  <div>
+    <va-button-group outline :rounded="false">
+      <va-button v-if="chatAutomations.length > 0 || isChatAutomationsBeingDeleted" :rounded="false"
+        :loading="isChatAutomationsBeingDeleted" :disabled="
+          isNewAutomationCreationInProgress || isChatAutomationsBeingDeleted
+        ">
+        <va-checkbox v-model="isCheckboxChecked" color="#000000" />
+      </va-button>
 
-</style>
+      <va-button v-if="chatAutomations.length > 0 || isChatAutomationsBeingDeleted" color="#EF4444" text-color="#000000"
+        :rounded="false" :loading="isChatAutomationsBeingDeleted" :disabled="
+          isNewAutomationCreationInProgress ||
+          !isAnyChatAutomationSelectedForDeletion ||
+          isChatAutomationsBeingDeleted
+        " @click="onDeleteSelectedAutomations()">Trash</va-button>
+
+      <va-button color="#10B981" text-color="#000000" :rounded="false" :loading="isNewAutomationCreationInProgress"
+        :disabled="isNewAutomationCreationInProgress" @click="onCreateNewAutomation()">Create Automation</va-button>
+    </va-button-group>
+  </div>
+</template>

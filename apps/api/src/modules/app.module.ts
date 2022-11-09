@@ -16,10 +16,9 @@ import { ChatAutomationsModule } from "./chat-automation.module";
       isGlobal: true,
       expandVariables: true,
       cache: true,
-      envFilePath: ".env.local",
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, "../../../../../", "webapp/dist"),
+      rootPath: path.join(__dirname, "../../../", "webapp/dist"),
     }),
     DbModule,
     AuthModule,
