@@ -1,20 +1,27 @@
 version: "3.8"
 
 services:
-  webserver:
-    container_name: telegram-workflow-webserver
+  webapp:
+    container_name: telegram-workflow-webapp
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./apps/webapp/Dockerfile
     ports:
-      - 8081:8081
-      - 3001:3001
+      - 3000:3000
+
+  api:
+    container_name: telegram-workflow-api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    ports:
+      - 8080:8080
     restart: always
     depends_on:
       - postgres
 
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     container_name: telegram-workflow-database
     ports:
       - 5432:5432

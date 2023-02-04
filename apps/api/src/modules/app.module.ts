@@ -3,7 +3,6 @@ import { ConfigModule } from "@nestjs/config";
 import { ServeStaticModule } from "@nestjs/serve-static";
 
 import path from "path";
-import _ from "lodash";
 
 import { DbModule } from "./db.module";
 import { AuthModule } from "./auth.module";

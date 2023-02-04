@@ -1,12 +1,9 @@
 version: "3.8"
 
 services:
-  webserver:
-    build:
-      context: .
-      dockerfile: Dockerfile.development
+  api:
     env_file:
-      - webserver.env
+      - api.env
     volumes:
       # Made readonly so container cannot change host file system,
       # only host will be allowed to write files to container.
